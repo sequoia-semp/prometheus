@@ -1,7 +1,7 @@
 packet_manifest_schema: '1.0'
 last_updated: '2026-06-09'
 packet_status: current
-active_work_item: W-008
+active_work_item: W-009
 rule: Current packets must be refreshed when any listed source hash changes.
 source_files:
 - path: AGENTS.md
@@ -33,20 +33,22 @@ source_files:
 - path: docs/contracts/AGENT_TOOLS.md
   sha256: 6885b8b66b0735587517536b8ea67190a5c374013136f9f210150cbfc9a31f08
 - path: docs/workscope/workscope.yaml
-  sha256: e3d1b18d6dada6142bc8c3a9e0e19174f3e5068bd5b591c97d6c3bab1a1f2614
+  sha256: 03ec3543894fba564ea84f1dd0be55b5531ba0b00e5c685f0aa2fd38c05ca384
 - path: docs/codex/work_items/W-001-repo-scaffold-and-invariant-gates.md
   sha256: aaa4acb95b5e9564056e5ed2dd198f2b6616fab3da416db4ac16d5012b3cf8a0
 - path: docs/codex/work_items/W-007-event-envelope-and-bitemporal-store.md
   sha256: 74468da8d2892b60d9fe91e62ee822cf9624f085039a18bb8443f6e179334111
 - path: docs/codex/work_items/W-008-generic-instrument-model.md
   sha256: 6fef53a1bab29cca43957d1c66e9b53249641d5b06724ad2a1a9afbc56da35b1
+- path: docs/codex/work_items/W-009-trade-blotter-and-position-projection.md
+  sha256: c1d69d20f0116988056b5e608d68ff74e85c3a5787e57658c58682d886169615
 - path: docs/packets/current/PLANNING_PACKET.md
-  sha256: 614f35a83984fb720a1c9f1b3164eea854f77920d5daddc8ff808e41100fd470
+  sha256: dc742b272a49bdcea0bc5562b121b7c5de75e076c8d253ec33bab23cc3394dfe
 - path: docs/packets/current/IMPLEMENTATION_PACKET.md
-  sha256: 9de90d70c2a497ec59b40b499f9f1a6ef93adb640fca4cc1b0913f5ae2271be6
+  sha256: 1e94a7a7f1b9ab400c4abd86c884c88528f6e310c2e694c99e75487dfb9f8180
 - path: docs/packets/current/REVIEW_PACKET.md
-  sha256: 448997ff46d8ceac419c495915687acfad023bacbb7eee616db99c7f43dfdd1c
+  sha256: ab61d8a5bcf4cf0c554123686385c28456576ef7804ee97355954af80cc701ca
 - path: docs/packets/current/RECONCILIATION_PACKET.md
-  sha256: cbefdae0d384e6d7f60e7f19a0388cb54643f39fc74b2228478f3d01580ad720
+  sha256: 55f135268472c5e3af33d731cf29b418a88d4a4f5558c6c22bfd1a6dd41a4c04
 - path: docs/packets/current/LOCAL_ICE_PACKET.md
   sha256: 6684ecbe1312cf7d07e22bc5b665ef4e58fdf631da37b2c4e93220b8d36c03c4
