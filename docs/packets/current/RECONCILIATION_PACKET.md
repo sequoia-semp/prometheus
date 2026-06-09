@@ -1,7 +1,7 @@
 ---
 packet_type: reconciliation
 packet_status: current
-active_work_item: W-009
+active_work_item: W-006
 last_updated: 2026-06-09
 canonical_sources:
   - docs/packets/current/PLANNING_PACKET.md
@@ -11,7 +11,7 @@ canonical_sources:
   - docs/reviews/REVIEW_LOG.md
 ---
 
-# Reconciliation Packet — W-009 Closeout and Next Loop
+# Reconciliation Packet — W-006 Closeout and Next Loop
 
 ## Purpose
 
@@ -38,17 +38,17 @@ Human/user dispositions
 6. Update `docs/reviews/REVIEW_LOG.md`.
 7. Update `docs/workscope/workscope.yaml` status for W-001.
 8. Refresh current packet metadata and manifest if referenced sources changed.
-9. Select the next active implementation packet, normally W-006 after W-009 closes.
+9. Select the next active implementation packet, normally W-003 after W-006 closes.
 
-## W-009 closeout rule
+## W-006 closeout rule
 
-Do not mark W-009 done unless:
+Do not mark W-006 done unless:
 
-- trade events are append-only;
-- amend/bust events reference prior IDs and are tested;
-- `position_as_of(as_of, known_at)` deterministic filtering is tested;
-- `book_version` derivation is deterministic and tested;
-- replay equivalence is tested;
+- Henry expiry is represented and tested;
+- settlement anchors are versioned and tested;
+- contract-month delivery periods are represented and tested;
+- power 5x16 delivery profile is represented and tested without schema fork;
+- calendar outputs carry `calendar_version`;
 - no source-adapter, pricing, risk, UI, Nautilus, or agent runtime behavior was added.
 
 ## Disposition table template
@@ -61,13 +61,13 @@ Do not mark W-009 done unless:
 
 ```json
 {
-  "closed_work_item": "W-009",
+  "closed_work_item": "W-006",
   "acceptance_status": "met | partial | not_met",
   "findings_dispositioned": [],
   "canonical_files_updated": [],
   "packets_refreshed": [],
   "workscope_status_changes": [],
-  "next_active_work_item": "W-006 | W-003 | other",
+  "next_active_work_item": "W-003 | W-014 | other",
   "remaining_blockers": [],
   "summary": ""
 }

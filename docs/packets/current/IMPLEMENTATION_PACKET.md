@@ -1,29 +1,29 @@
 ---
 packet_type: implementation
 packet_status: current
-active_work_item: W-009
+active_work_item: W-006
 last_updated: 2026-06-09
 canonical_sources:
   - AGENTS.md
   - docs/packets/current/PLANNING_PACKET.md
   - docs/workscope/workscope.yaml
-  - docs/codex/work_items/W-009-trade-blotter-and-position-projection.md
+  - docs/codex/work_items/W-006-calendar-and-expiry-service.md
 ---
 
-# Implementation Packet — W-009 Trade Blotter and Position Projection
+# Implementation Packet — W-006 Calendar and Expiry Service
 
 ## Task
 
-Implement append-only trade blotter events and deterministic bitemporal position projection. Do not implement ICE, PJM, pricing, risk, Textual screens, Nautilus runtime behavior, or agent business logic yet.
+Implement versioned calendars, expiry rules, delivery periods, delivery profiles, and settlement anchors. Do not implement ICE, PJM, pricing, risk, Textual screens, Nautilus runtime behavior, or agent business logic yet.
 
 ## Files in scope
 
 ```text
-src/ata/blotter/**
-tests/unit/**blotter**
+src/ata/calendars/**
+tests/unit/**calendar**
 docs/packets/current/** if packet metadata needs refreshing
 docs/workscope/workscope.yaml
-docs/codex/work_items/W-009-trade-blotter-and-position-projection.md
+docs/codex/work_items/W-006-calendar-and-expiry-service.md
 scripts/check_*.py if active-work-item checks need updating
 ```
 
@@ -34,35 +34,35 @@ src/ata/pricing implementation
 src/ata/risk implementation
 src/ata/ice_sidecar runtime adapters
 src/ata/pjm runtime client
-src/ata/calendars expiry implementation
 src/ata/instruments changes beyond use of IDs
+src/ata/blotter implementation changes
 src/ata/agent runtime harness
 src/ata/ui_textual screens
 src/ata/nautilus runtime adapter
 ```
 
-## Required blotter boundary
+## Required calendar boundary
 
-Implement contract-compatible blotter primitives:
+Implement contract-compatible calendar primitives:
 
-- `TradeEvent`
-- `Position`
-- append-only `TradeBlotter`
-- `position_as_of(as_of, known_at)`
-- deterministic `book_version`
+- versioned calendar object
+- Henry last-trading-day/expiry rule representation
+- settlement anchors as versioned inputs
+- delivery periods for contract months
+- power 5x16 delivery profile representation
+- outputs carrying `calendar_version`
 
 Keep DTO boundaries JSON/Serde-friendly:
 
-- Decimal values serialize as strings.
-- Datetimes serialize as timezone-aware RFC3339 UTC.
+- Dates serialize as ISO dates.
 - No pandas DataFrame, Python object graph, or framework object becomes a canonical boundary.
 
 ## Acceptance criteria
 
-- Trade events are append-only; amend/bust are new events referencing prior IDs.
-- `position_as_of(as_of, known_at)` returns deterministic fold.
-- `book_version` derives from applied trade-event set.
-- Positions reproduce from event-store replay.
+- Henry last-trading-day/expiry rule is represented.
+- Settlement anchors are versioned inputs.
+- Power calendars and 5x16 delivery profiles can be versioned.
+- `calendar_version` is emitted into relevant outputs.
 - Default checks pass without ICE Connect/Python, PJM live data, Nautilus, Textual, GitHub Actions, release automation, or local LLM processes.
 
 ## Suggested commands
@@ -83,7 +83,7 @@ If the project chooses a different equivalent command, document it in README and
 
 ```json
 {
-  "work_item": "W-009",
+  "work_item": "W-006",
   "summary": "",
   "files_changed": [],
   "tests_added": [],

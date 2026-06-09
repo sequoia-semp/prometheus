@@ -1,7 +1,7 @@
 packet_manifest_schema: '1.0'
 last_updated: '2026-06-09'
 packet_status: current
-active_work_item: W-009
+active_work_item: W-006
 rule: Current packets must be refreshed when any listed source hash changes.
 source_files:
 - path: AGENTS.md
@@ -33,9 +33,11 @@ source_files:
 - path: docs/contracts/AGENT_TOOLS.md
   sha256: 6885b8b66b0735587517536b8ea67190a5c374013136f9f210150cbfc9a31f08
 - path: docs/workscope/workscope.yaml
-  sha256: 03ec3543894fba564ea84f1dd0be55b5531ba0b00e5c685f0aa2fd38c05ca384
+  sha256: 48ea9ae4ad8ce9dadb913abadddefce6c242791bbfad73d23fa5da644ff2456c
 - path: docs/codex/work_items/W-001-repo-scaffold-and-invariant-gates.md
   sha256: aaa4acb95b5e9564056e5ed2dd198f2b6616fab3da416db4ac16d5012b3cf8a0
+- path: docs/codex/work_items/W-006-calendar-and-expiry-service.md
+  sha256: e31d1bdc80513a29687ace66ecdc2e35722c9779dfe710a51f9ab1fdadcecf2f
 - path: docs/codex/work_items/W-007-event-envelope-and-bitemporal-store.md
   sha256: 74468da8d2892b60d9fe91e62ee822cf9624f085039a18bb8443f6e179334111
 - path: docs/codex/work_items/W-008-generic-instrument-model.md
@@ -43,12 +45,12 @@ source_files:
 - path: docs/codex/work_items/W-009-trade-blotter-and-position-projection.md
   sha256: c1d69d20f0116988056b5e608d68ff74e85c3a5787e57658c58682d886169615
 - path: docs/packets/current/PLANNING_PACKET.md
-  sha256: dc742b272a49bdcea0bc5562b121b7c5de75e076c8d253ec33bab23cc3394dfe
+  sha256: 1f7ba5ab16da40c99763d74d541843e15078fd2d885a069ed7a704eb9e7fb68a
 - path: docs/packets/current/IMPLEMENTATION_PACKET.md
-  sha256: 1e94a7a7f1b9ab400c4abd86c884c88528f6e310c2e694c99e75487dfb9f8180
+  sha256: 3a8e4ca91d0b009be71b2f3754b1b9348f72de9efdc3b805f78b6bc50b96b02e
 - path: docs/packets/current/REVIEW_PACKET.md
-  sha256: ab61d8a5bcf4cf0c554123686385c28456576ef7804ee97355954af80cc701ca
+  sha256: 04c71649ec237b6b16034ec76fc21d773765835a1938e0ed0582a963ed06b0df
 - path: docs/packets/current/RECONCILIATION_PACKET.md
-  sha256: 55f135268472c5e3af33d731cf29b418a88d4a4f5558c6c22bfd1a6dd41a4c04
+  sha256: e306b7f4a55b7a1d97e2177ad58b31963220dda2df722a5205471079d70cf062
 - path: docs/packets/current/LOCAL_ICE_PACKET.md
   sha256: 6684ecbe1312cf7d07e22bc5b665ef4e58fdf631da37b2c4e93220b8d36c03c4

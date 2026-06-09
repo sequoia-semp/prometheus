@@ -31,6 +31,7 @@ REQUIRED = [
     "docs/packets/current/LOCAL_ICE_PACKET.md",
     "docs/packets/current/PACKET_MANIFEST.yaml",
     "docs/codex/work_items/W-001-repo-scaffold-and-invariant-gates.md",
+    "docs/codex/work_items/W-006-calendar-and-expiry-service.md",
     "docs/codex/work_items/W-007-event-envelope-and-bitemporal-store.md",
     "docs/codex/work_items/W-008-generic-instrument-model.md",
     "docs/codex/work_items/W-009-trade-blotter-and-position-projection.md",

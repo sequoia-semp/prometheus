@@ -1,7 +1,7 @@
 ---
 packet_type: planning
 packet_status: current
-active_work_item: W-009
+active_work_item: W-006
 last_updated: 2026-06-09
 canonical_sources:
   - AGENTS.md
@@ -124,8 +124,8 @@ W-000  Planning-system reconciliation and packet workflow — done in this start
 W-001  Repo scaffold and invariant gates — done
 W-007  Event envelope and bitemporal store — done
 W-008  Generic instrument model — done
-W-009  Trade blotter and position projection — active
-W-006  Calendars and expiry service
+W-009  Trade blotter and position projection — done
+W-006  Calendars and expiry service — active
 W-003  ICE Python sidecar fixture/local-live boundary
 W-014  Henry futures/options golden book: PV, Greeks, PnL, VaR
 W-026  Fixture-backed read-only agent loop

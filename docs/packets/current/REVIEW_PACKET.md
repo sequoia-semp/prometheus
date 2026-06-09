@@ -1,7 +1,7 @@
 ---
 packet_type: review
 packet_status: current
-review_target: W-009
+review_target: W-006
 last_updated: 2026-06-09
 canonical_sources:
   - AGENTS.md
@@ -10,21 +10,21 @@ canonical_sources:
   - docs/workscope/workscope.yaml
 ---
 
-# Review Packet — W-009 Trade Blotter and Position Projection
+# Review Packet — W-006 Calendar and Expiry Service
 
 ## Review target
 
-Review the W-009 trade blotter implementation. The review should verify append-only event behavior, amendment/bust semantics, deterministic bitemporal position folds, deterministic book versions, and replay equivalence.
+Review the W-006 calendar and expiry implementation. The review should verify versioned calendar inputs, Henry expiry representation, settlement anchors, delivery periods, power 5x16 profile support, and calendar version lineage.
 
 ## Review questions
 
-1. Does `TradeEvent`/`Position` match `docs/contracts/BLOTTER.md`?
-2. Are trade events append-only with no mutation/delete path?
-3. Are amendments and busts represented as new events referencing prior IDs?
-4. Does `position_as_of(as_of, known_at)` filter both trade time and known time?
-5. Is `book_version` deterministic and based on applied trade-event IDs?
-6. Do positions reproduce from replaying events into a fresh blotter?
-7. Are Decimal and datetime values serialized deterministically?
+1. Are calendars, expiry rules, delivery profiles, and settlement anchors versioned domain inputs?
+2. Is Henry last-trading-day/expiry rule represented without hardcoding in pricing/UI code?
+3. Are settlement anchors explicit and versioned?
+4. Can power 5x16 delivery profiles be represented without schema fork?
+5. Do relevant outputs include `calendar_version`?
+6. Are dates serialized deterministically?
+7. Does the implementation avoid premature holiday-source or external calendar dependencies?
 8. Does the implementation avoid ICE/PJM/pricing/risk/UI/agent/Nautilus runtime behavior?
 9. Do `python3 scripts/check_plan_freshness.py` and `python3 scripts/check_invariants.py` pass?
 10. Are packets still persistent and current after metadata changes?
@@ -33,11 +33,11 @@ Review the W-009 trade blotter implementation. The review should verify append-o
 
 Flag as blocking:
 
-- Trade amendments/busts mutate or delete existing events.
-- `position_as_of` ignores either `as_of` or `known_at`.
-- `book_version` depends on insertion order, object identity, or wall-clock time.
-- Replay into a fresh blotter cannot reproduce positions.
-- Runtime implementation appears outside `src/ata/blotter`.
+- Calendar rules are hidden constants without version IDs.
+- Henry expiry cannot be reproduced from versioned inputs.
+- Power 5x16 requires a separate schema fork.
+- Calendar output omits `calendar_version`.
+- Runtime implementation appears outside `src/ata/calendars`.
 
 ## Output format
 
