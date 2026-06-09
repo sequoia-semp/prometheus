@@ -28,9 +28,11 @@ Packets are not a second source of truth. If a packet contradicts an ADR, contra
 
 ## Branch-local authority
 
-Canonical docs are canonical within the branch being inspected. On `codex` or `codex/<work-item>-<slug>` branches, ADRs, contracts, workscope rows, and current packets may describe work that has not yet been merged to `main`.
+Canonical docs are canonical within the branch being inspected. On `codex` or `codex/<work-item>-<slug>` branches, ADRs, contracts, workscope rows, and current packets may describe work that has not yet been merged to `main`. Temporary `codex/<process-or-subtask-slug>` branches may be based on an active coding branch and should merge back to that coding branch, not directly to `main`.
 
 `main` is stable only after user-approved reconciliation and merge. External review should inspect the coding branch or PR head and its branch-local packets unless the user explicitly asks to inspect `main`.
+
+`review/<work-item>-<slug>` and `reconcile/<work-item>-<slug>` branches may be used for review and closeout. These branches should preserve the packet `base_ref` and `head_ref` orientation so review and reconciliation instances compare the intended branch state.
 
 Packet frontmatter and `PACKET_MANIFEST.yaml` must identify `stable_branch`, `working_branch`, `packet_scope`, `base_ref`, and `head_ref` so planning and review infrastructure can distinguish stable project state from branch-local coding context.
 

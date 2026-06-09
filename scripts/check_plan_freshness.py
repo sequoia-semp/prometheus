@@ -7,13 +7,15 @@ Python project scaffold exists.
 from __future__ import annotations
 
 import hashlib
+import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-REQUIRED = [
+BASE_REQUIRED = [
     "AGENTS.md",
     "README.md",
     "docs/planning/SOURCE_OF_TRUTH.md",
@@ -30,11 +32,6 @@ REQUIRED = [
     "docs/packets/current/RECONCILIATION_PACKET.md",
     "docs/packets/current/LOCAL_ICE_PACKET.md",
     "docs/packets/current/PACKET_MANIFEST.yaml",
-    "docs/codex/work_items/W-001-repo-scaffold-and-invariant-gates.md",
-    "docs/codex/work_items/W-006-calendar-and-expiry-service.md",
-    "docs/codex/work_items/W-007-event-envelope-and-bitemporal-store.md",
-    "docs/codex/work_items/W-008-generic-instrument-model.md",
-    "docs/codex/work_items/W-009-trade-blotter-and-position-projection.md",
 ]
 
 CURRENT_PACKET_PATHS = [
@@ -57,6 +54,7 @@ BRANCH_METADATA_KEYS = [
 
 EXPECTED_WORK_ITEMS = {
     "W-000",
+    "W-000B",
     "W-001",
     "W-007",
     "W-008",
@@ -82,9 +80,20 @@ def rel(path: Path) -> str:
 
 
 def check_required(errors: list[str]) -> None:
-    for item in REQUIRED:
+    for item in BASE_REQUIRED:
         if not (ROOT / item).exists():
             errors.append(f"missing required file: {item}")
+
+
+def work_item_packet_path(work_item: str) -> Path:
+    escaped = re.escape(work_item)
+    matches = sorted((ROOT / "docs/codex/work_items").glob(f"{work_item}-*.md"))
+    if matches:
+        return matches[0]
+    for path in sorted((ROOT / "docs/codex/work_items").glob("*.md")):
+        if re.search(rf"\b{escaped}\b", path.read_text(encoding="utf-8")):
+            return path
+    return ROOT / "docs/codex/work_items" / f"{work_item}.md"
 
 
 def check_adr_index(errors: list[str]) -> None:
@@ -103,7 +112,19 @@ def check_adr_index(errors: list[str]) -> None:
         errors.append("ADR_INDEX references missing ADR files: " + ", ".join(missing))
 
 
-def check_workscope(errors: list[str]) -> None:
+def workscope_item_status(text: str, work_item: str) -> str | None:
+    match = re.search(
+        rf"^\s*- id:\s*{re.escape(work_item)}\n(?P<body>(?:  .+\n)*)",
+        text,
+        flags=re.MULTILINE,
+    )
+    if not match:
+        return None
+    status = re.search(r"^\s*status:\s*(\S+)", match.group("body"), flags=re.MULTILINE)
+    return status.group(1) if status else None
+
+
+def check_workscope(errors: list[str], active_work_item: str | None) -> None:
     path = ROOT / "docs/workscope/workscope.yaml"
     if not path.exists():
         return
@@ -112,6 +133,12 @@ def check_workscope(errors: list[str]) -> None:
     missing = sorted(EXPECTED_WORK_ITEMS - ids)
     if missing:
         errors.append("workscope missing expected work items: " + ", ".join(missing))
+    if active_work_item:
+        status = workscope_item_status(text, active_work_item)
+        if status is None:
+            errors.append(f"active work item {active_work_item} missing from workscope")
+        elif status != "active":
+            errors.append(f"active work item {active_work_item} has workscope status {status!r}")
 
     for packet in ["PLANNING_PACKET.md", "IMPLEMENTATION_PACKET.md"]:
         p = ROOT / "docs/packets/current" / packet
@@ -140,6 +167,28 @@ def parse_frontmatter(path: Path) -> dict[str, str]:
         match = re.match(r"([A-Za-z0-9_]+):\s*(.*?)\s*$", line)
         if match:
             values[match.group(1)] = match.group(2).strip().strip("'\"")
+    return values
+
+
+def parse_frontmatter_list(path: Path, key: str) -> list[str]:
+    lines = path.read_text(encoding="utf-8").splitlines()
+    if not lines or lines[0] != "---":
+        return []
+    values: list[str] = []
+    in_list = False
+    for line in lines[1:]:
+        if line == "---":
+            break
+        if re.match(rf"{re.escape(key)}:\s*$", line):
+            in_list = True
+            continue
+        if in_list:
+            item = re.match(r"\s*-\s*(.+?)\s*$", line)
+            if item:
+                values.append(item.group(1).strip().strip("'\""))
+                continue
+            if line and not line.startswith(" "):
+                break
     return values
 
 
@@ -173,7 +222,9 @@ def validate_active_packet_metadata(
         "IMPLEMENTATION_PACKET.md active_work_item": implementation.get("active_work_item"),
         "REVIEW_PACKET.md review_target": review.get("review_target"),
         "RECONCILIATION_PACKET.md active_work_item": reconciliation.get("active_work_item"),
-        "RECONCILIATION_PACKET.md closed_work_item": reconciliation.get("closed_work_item"),
+        "RECONCILIATION_PACKET.md reconciliation_target": reconciliation.get(
+            "reconciliation_target"
+        ),
         "PACKET_MANIFEST.yaml active_work_item": manifest_metadata.get("active_work_item"),
     }
     for label, value in comparisons.items():
@@ -234,6 +285,67 @@ def parse_manifest_hashes(manifest: Path) -> dict[str, str]:
     return hashes
 
 
+def manifest_source_paths(manifest: Path) -> set[str]:
+    return set(parse_manifest_hashes(manifest))
+
+
+def canonical_sources_by_packet() -> dict[str, list[str]]:
+    sources: dict[str, list[str]] = {}
+    for packet_path in CURRENT_PACKET_PATHS:
+        path = ROOT / packet_path
+        if path.exists():
+            sources[packet_path] = parse_frontmatter_list(path, "canonical_sources")
+    return sources
+
+
+def validate_manifest_coverage(
+    packet_sources: dict[str, list[str]],
+    manifest_hashes: dict[str, str],
+    active_work_item: str | None,
+) -> list[str]:
+    errors: list[str] = []
+    manifest_paths = set(manifest_hashes)
+    required_sources: set[str] = set(CURRENT_PACKET_PATHS)
+    for packet_path, sources in packet_sources.items():
+        required_sources.add(packet_path)
+        for source in sources:
+            required_sources.add(source)
+
+    if active_work_item:
+        active_packet = rel(work_item_packet_path(active_work_item))
+        required_sources.add(active_packet)
+
+    for source in sorted(required_sources):
+        path = ROOT / source
+        if not path.exists():
+            errors.append(f"canonical source missing on disk: {source}")
+            continue
+        if source not in manifest_paths:
+            errors.append(f"canonical source absent from manifest: {source}")
+            continue
+        actual = sha256(path)
+        expected = manifest_hashes[source]
+        if actual != expected:
+            errors.append(
+                f"manifest hash mismatch for canonical source {source}: "
+                f"expected {expected}, actual {actual}"
+            )
+    return errors
+
+
+def check_manifest_coverage(errors: list[str], active_work_item: str | None) -> None:
+    manifest = ROOT / "docs/packets/current/PACKET_MANIFEST.yaml"
+    if not manifest.exists():
+        return
+    errors.extend(
+        validate_manifest_coverage(
+            canonical_sources_by_packet(),
+            parse_manifest_hashes(manifest),
+            active_work_item,
+        )
+    )
+
+
 def check_manifest(errors: list[str]) -> None:
     manifest = ROOT / "docs/packets/current/PACKET_MANIFEST.yaml"
     if not manifest.exists():
@@ -248,6 +360,53 @@ def check_manifest(errors: list[str]) -> None:
             errors.append(
                 f"manifest hash mismatch for {source}: expected {expected}, actual {actual}"
             )
+
+
+def validate_branch_metadata(
+    current_branch: str | None,
+    manifest_metadata: dict[str, str],
+    *,
+    skip: bool = False,
+) -> list[str]:
+    if skip or current_branch is None:
+        return []
+    expected = manifest_metadata.get("working_branch")
+    if current_branch != expected:
+        return [
+            f"current branch {current_branch!r} does not match "
+            f"packet working_branch {expected!r}"
+        ]
+    return []
+
+
+def current_git_branch() -> str | None:
+    try:
+        result = subprocess.run(
+            ["git", "branch", "--show-current"],
+            cwd=ROOT,
+            check=False,
+            text=True,
+            capture_output=True,
+        )
+    except OSError:
+        return None
+    if result.returncode != 0:
+        return None
+    branch = result.stdout.strip()
+    return branch or None
+
+
+def check_branch(errors: list[str]) -> None:
+    manifest_path = ROOT / "docs/packets/current/PACKET_MANIFEST.yaml"
+    if not manifest_path.exists():
+        return
+    errors.extend(
+        validate_branch_metadata(
+            current_git_branch(),
+            parse_manifest_metadata(manifest_path),
+            skip=os.environ.get("ATA_SKIP_BRANCH_CHECK") == "1",
+        )
+    )
 
 
 def check_active_version_labels(errors: list[str]) -> None:
@@ -266,11 +425,16 @@ def check_active_version_labels(errors: list[str]) -> None:
 
 def main() -> int:
     errors: list[str] = []
+    manifest_path = ROOT / "docs/packets/current/PACKET_MANIFEST.yaml"
+    manifest_metadata = parse_manifest_metadata(manifest_path) if manifest_path.exists() else {}
+    active_work_item = manifest_metadata.get("active_work_item")
     check_required(errors)
     check_adr_index(errors)
-    check_workscope(errors)
+    check_workscope(errors, active_work_item)
     check_packet_metadata(errors)
+    check_manifest_coverage(errors, active_work_item)
     check_manifest(errors)
+    check_branch(errors)
     check_active_version_labels(errors)
     if errors:
         print("Planning/packet checks failed:")

@@ -6,7 +6,13 @@ This repository starts from a planning-first, packetized workflow. The project g
 
 The first proving product is ICE Henry Hub gas futures and options. PJM remains a featured product vertical and use case, not a dropped scope item.
 
-This start pack represents the completed planning/packet bootstrap. After copying these files into a repo, the next active implementation task is W-001: repo scaffold and invariant gates.
+The current active implementation task is defined by:
+
+- `docs/workscope/workscope.yaml`
+- `docs/packets/current/PLANNING_PACKET.md`
+- `docs/packets/current/IMPLEMENTATION_PACKET.md`
+
+On coding branches, these files may be ahead of `main`. Inspect the branch or PR head named in packet metadata.
 
 ## Start here
 
@@ -39,13 +45,13 @@ scripts/build_packet_bundle.py    current packet bundle builder
 .ata_local/                       local-only ICE/PJM/live scratch area; gitignored
 ```
 
-W-001 will create the runtime scaffold (`pyproject.toml`, `src/ata/**`, `apps/**`, `tests/**`, CLI/Textual-compatible entrypoints, Nautilus placeholder boundary, and local invariant gates). This pack intentionally does not implement runtime trading, pricing, event-store, or ICE/PJM client code.
+The runtime scaffold lives under `pyproject.toml`, `src/ata/**`, `apps/**`, `tests/**`, CLI/Textual-compatible entrypoints, Nautilus placeholder boundary, and local invariant gates. Current packets identify the active task for the branch being inspected.
 
 ## Packet rule
 
 Packets are persistent and portable. They exist so planning, coding, review, and reconciliation can move between local LLM instances without requiring each instance to rediscover the repo. Packets are not a second source of truth: they package current working context from canonical repo docs.
 
-Packets are branch-local working context. `main` is stable, user-approved state; `codex` or `codex/<work-item>-<slug>` branches may carry current packets that are ahead of `main`. External review should inspect the coding branch or PR head together with that branch's packets, not `main` packets, unless the review is explicitly about `main`.
+Packets are branch-local working context. `main` is stable, user-approved state; `codex` or `codex/<work-item>-<slug>` branches may carry current packets that are ahead of `main`. Temporary `codex/<process-or-subtask-slug>` branches may be based on an active coding branch and should merge back to that branch, not directly to `main`. External review should inspect the coding branch or PR head together with that branch's packets, not `main` packets, unless the review is explicitly about `main`. `review/<work-item>-<slug>` and `reconcile/<work-item>-<slug>` branches may be used for review and closeout handoffs.
 
 ## Local ICE rule
 

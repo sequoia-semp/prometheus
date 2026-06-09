@@ -31,6 +31,9 @@ main
 codex or codex/<work-item>-<slug>
   Active coding-agent work branch. Branch-local docs/packets/current/* describe this branch's active state and may be ahead of main.
 
+codex/<process-or-subtask-slug>
+  Temporary process or subtask branch based on an active codex work branch. Example: codex/workflow-branch-packets based on codex/w-006-calendar-expiry. Merge back into the active codex work branch, not directly to main.
+
 CODEX
   Legacy/local equivalent of codex until renamed. Prefer lowercase codex names in new docs and branches.
 

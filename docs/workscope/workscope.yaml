@@ -28,7 +28,7 @@ work_items:
   - PACKET_MANIFEST.yaml exists and lists current packet source files and hashes.
   - README and AGENTS.md point agents to the packet read order.
   - ADR_INDEX references only ADR files that exist.
-  - workscope.yaml includes W-000, W-001, W-007, W-008, W-009, W-006, W-003, W-014, W-026, W-016, W-005, W-015, W-N1, W-025.
+  - workscope.yaml includes W-000, W-000B, W-001, W-007, W-008, W-009, W-006, W-003, W-014, W-026, W-016, W-005, W-015, W-N1, W-025.
   - Event envelope, instrument, pricer, risk, revaluation, blotter, agent, PJM, and ICE contracts agree with ADRs.
   - Local licensed-user ICE workflow is supported by docs and packet instructions.
   - No runtime code is implemented.
@@ -39,6 +39,26 @@ work_items:
   - PJM client implementation
   - Nautilus implementation
   - agent runtime implementation
+
+- id: W-000B
+  title: Branch-local packet workflow hardening
+  milestone: M0
+  priority: P0
+  status: active
+  depends_on: [W-000]
+  objective: Clarify branch-local packet semantics, PR/review branch targeting, packet metadata, manifest coverage, and freshness checks so coding/review instances inspect the correct branch state.
+  adrs: [ADR-024]
+  contracts: []
+  acceptance:
+  - AGENTS, README, SOURCE_OF_TRUTH, and PACKET_WORKFLOW define main/codex/review/reconcile branch policy.
+  - Current packet frontmatter includes branch metadata.
+  - Current packets are explicitly branch-local.
+  - Current implementation, review, and reconciliation packets describe W-000B on this branch.
+  - Freshness checks validate active-work-item consistency across current packets and PACKET_MANIFEST.yaml.
+  - Freshness checks validate that every packet canonical_source is present on disk and listed in PACKET_MANIFEST.yaml.
+  - PACKET_MANIFEST.yaml hashes every listed source file.
+  - Stale W-001 active-task language is removed.
+  - No W-006 calendar domain implementation is added.
 
 - id: W-001
   title: Repo scaffold and invariant gates
@@ -113,7 +133,8 @@ work_items:
   title: Calendar and expiry service
   milestone: M1
   priority: P0
-  status: active
+  status: ready
+  branch_note: Temporarily ready/paused while W-000B is active on codex/workflow-branch-packets; returns to active after W-000B merges into codex/w-006-calendar-expiry.
   depends_on: [W-008]
   objective: Implement versioned calendars, expiry rules, delivery periods, and settlement anchors.
   adrs: [ADR-021]

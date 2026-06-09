@@ -1,7 +1,7 @@
 ---
 packet_type: planning
 packet_status: current
-active_work_item: W-006
+active_work_item: W-000B
 last_updated: 2026-06-09
 repository: sequoia-semp/prometheus
 stable_branch: main
@@ -128,11 +128,12 @@ PJM Data Miner
 
 ```text
 W-000  Planning-system reconciliation and packet workflow — done in this start pack
+W-000B Branch-local packet workflow hardening — active on codex/workflow-branch-packets
 W-001  Repo scaffold and invariant gates — done
 W-007  Event envelope and bitemporal store — done
 W-008  Generic instrument model — done
 W-009  Trade blotter and position projection — done
-W-006  Calendars and expiry service — active
+W-006  Calendars and expiry service — ready/paused; resumes after W-000B merge
 W-003  ICE Python sidecar fixture/local-live boundary
 W-014  Henry futures/options golden book: PV, Greeks, PnL, VaR
 W-026  Fixture-backed read-only agent loop
@@ -179,4 +180,4 @@ Active packet drift fails `python3 scripts/check_plan_freshness.py`. Archived pa
 
 ## Open questions
 
-The active open questions are local ICE field/symbology discovery, exact live vol observations, Textual app shape, opencode/Ollama runtime boundary, Nautilus fit, power vertical details, and W-016 cold archive format. They do not block W-001.
+The active open questions are local ICE field/symbology discovery, exact live vol observations, Textual app shape, opencode/Ollama runtime boundary, Nautilus fit, power vertical details, and W-016 cold archive format. They do not block the current active work item.

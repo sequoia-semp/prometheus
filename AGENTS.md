@@ -24,6 +24,7 @@ Before editing, a coding or review agent must read:
 
 - `main` is stable, user-approved project state. Only merge implemented, reviewed, and reconciled work there.
 - `codex` or `codex/<work-item>-<slug>` is the preferred coding-agent branch convention. Branch-local `docs/packets/current/*` files describe that branch's active state and may be ahead of `main`.
+- `codex/<process-or-subtask-slug>` may be used for temporary process or subtask branches based on an active `codex/*` branch. Merge these back into the active coding branch, not directly to `main`.
 - An existing local branch named `CODEX` should be treated as equivalent to `codex` until it can be renamed.
 - `review/<work-item>-<slug>` and `reconcile/<work-item>-<slug>` may be used for external review or closeout. Review agents should inspect the coding branch or PR head, not `main`, unless explicitly asked to inspect `main`.
 - Local working trees may contain `.ata_local/`, local ICE probe outputs, and temporary packet transfers. These remain uncommitted unless intentionally sanitized and added.
@@ -52,7 +53,7 @@ Before editing, a coding or review agent must read:
 
 ## Local checks
 
-Run the targeted checks for W-001-style scaffold changes:
+Run the targeted checks for packet, scaffold, and active-work-item changes:
 
 ```bash
 python3 scripts/check_plan_freshness.py
