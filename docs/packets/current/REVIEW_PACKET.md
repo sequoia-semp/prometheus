@@ -1,7 +1,7 @@
 ---
 packet_type: review
 packet_status: current
-review_target: W-007
+review_target: W-008
 last_updated: 2026-06-09
 canonical_sources:
   - AGENTS.md
@@ -10,21 +10,21 @@ canonical_sources:
   - docs/workscope/workscope.yaml
 ---
 
-# Review Packet — W-007 Event Envelope and Bitemporal Store
+# Review Packet — W-008 Generic Instrument Model
 
 ## Review target
 
-Review the W-007 event envelope and bitemporal store implementation. The review should verify append-only behavior, deterministic ordering, bitemporal query semantics, JSONL compatibility, snapshot ID determinism, and contract-compatible serialization.
+Review the W-008 generic instrument model implementation. The review should verify deterministic identity derivation, contract-compatible serialization, required option fields, multiplier policy lineage, Henry gas support, and power placeholder support without product-specific schema forks.
 
 ## Review questions
 
-1. Does the event envelope match `docs/contracts/EVENT_ENVELOPE.md`?
-2. Are updates/deletes impossible through the public event-store API?
-3. Is `stream_sequence` monotonic per `stream_id` without assuming a global sequence?
-4. Do `as_of` and `known_at` queries return deterministic bitemporal results?
-5. Are snapshot IDs deterministic and based on event hashes plus version lineage?
-6. Do JSONL import/export round-trip without losing Decimal string values or UTC timestamp semantics?
-7. Do events carry `source_system` and `data_scope`?
+1. Does `InstrumentIdentity` match `docs/contracts/INSTRUMENT.md`?
+2. Is the canonical string ID derived from typed fields rather than treated as source truth?
+3. Do Henry LD1 future and European option-on-future examples round-trip deterministically?
+4. Are option required fields enforced?
+5. Is American-style option representable while clearly unsupported for v0 pricing?
+6. Does `MultiplierPolicy` include policy ID, source, and version?
+7. Can a power 5x16 placeholder be represented without schema fork?
 8. Does the implementation avoid ICE/PJM/pricing/risk/UI/agent/Nautilus runtime behavior?
 9. Do `python3 scripts/check_plan_freshness.py` and `python3 scripts/check_invariants.py` pass?
 10. Are packets still persistent and current after metadata changes?
@@ -33,12 +33,11 @@ Review the W-007 event envelope and bitemporal store implementation. The review 
 
 Flag as blocking:
 
-- Event-store API can mutate or delete accepted events.
-- Bitemporal query ignores either `as_of` or `known_at`.
-- Per-stream ordering is not enforced.
-- Snapshot IDs depend on insertion order, process randomness, or wall-clock time.
-- JSONL output cannot be reimported deterministically.
-- Runtime implementation appears outside `src/ata/events`.
+- Canonical instrument ID depends on process randomness, object identity, or field ordering.
+- Option identities can be created without strike/right/expiry/reference future.
+- American options are silently treated as supported by v0 pricing.
+- Power placeholder requires a separate schema fork.
+- Runtime implementation appears outside `src/ata/instruments`.
 
 ## Output format
 

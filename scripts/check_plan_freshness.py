@@ -32,6 +32,7 @@ REQUIRED = [
     "docs/packets/current/PACKET_MANIFEST.yaml",
     "docs/codex/work_items/W-001-repo-scaffold-and-invariant-gates.md",
     "docs/codex/work_items/W-007-event-envelope-and-bitemporal-store.md",
+    "docs/codex/work_items/W-008-generic-instrument-model.md",
 ]
 
 EXPECTED_WORK_ITEMS = {

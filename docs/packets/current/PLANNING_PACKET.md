@@ -1,7 +1,7 @@
 ---
 packet_type: planning
 packet_status: current
-active_work_item: W-007
+active_work_item: W-008
 last_updated: 2026-06-09
 canonical_sources:
   - AGENTS.md
@@ -122,8 +122,8 @@ PJM Data Miner
 ```text
 W-000  Planning-system reconciliation and packet workflow — done in this start pack
 W-001  Repo scaffold and invariant gates — done
-W-007  Event envelope and bitemporal store — active
-W-008  Generic instrument model
+W-007  Event envelope and bitemporal store — done
+W-008  Generic instrument model — active
 W-009  Trade blotter and position projection
 W-006  Calendars and expiry service
 W-003  ICE Python sidecar fixture/local-live boundary
