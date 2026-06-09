@@ -1,7 +1,7 @@
 ---
 packet_type: review
 packet_status: current
-review_target: W-001
+review_target: W-007
 last_updated: 2026-06-09
 canonical_sources:
   - AGENTS.md
@@ -10,40 +10,35 @@ canonical_sources:
   - docs/workscope/workscope.yaml
 ---
 
-# Review Packet — W-001 Repo Scaffold and Invariant Gates
+# Review Packet — W-007 Event Envelope and Bitemporal Store
 
 ## Review target
 
-Review the W-001 scaffold and invariant-gate implementation. The review should verify that the repo can support the later event/pricing/ICE/PJM/Textual/agent/Nautilus work without prematurely implementing business logic or narrowing the architecture.
+Review the W-007 event envelope and bitemporal store implementation. The review should verify append-only behavior, deterministic ordering, bitemporal query semantics, JSONL compatibility, snapshot ID determinism, and contract-compatible serialization.
 
 ## Review questions
 
-1. Does the scaffold preserve the full plan: ICE sidecar, Henry Hub gas proving book, PJM featured vertical, event store, instrument model, blotter, pricing/risk, revaluation, Textual-compatible views, opencode/Ollama agent loop, Nautilus spike?
-2. Are package boundaries present and language-neutral enough for future Rust/Nautilus integration?
-3. Does CI/local testing avoid requiring ICE Connect/Python?
-4. Is `.ata_local/` and live/local data protected by `.gitignore`?
-5. Does the `icepython` import ban exist and target only non-sidecar code?
-6. Does `python3 scripts/check_plan_freshness.py` still pass?
-7. Does `python3 scripts/check_invariants.py` still pass?
-8. Are placeholder tests/lint/type commands documented and runnable?
-9. Did W-001 avoid implementing W-003 ICE logic, W-014 pricing/risk, W-025 agent runtime, or other future work?
-10. Are packets still persistent and current after any metadata changes?
-11. Are any hidden architecture decisions embedded in code/config without ADR/workscope linkage?
-12. Are Textual, opencode/Ollama, and Nautilus packages scaffolded as boundaries rather than runtime dependencies?
+1. Does the event envelope match `docs/contracts/EVENT_ENVELOPE.md`?
+2. Are updates/deletes impossible through the public event-store API?
+3. Is `stream_sequence` monotonic per `stream_id` without assuming a global sequence?
+4. Do `as_of` and `known_at` queries return deterministic bitemporal results?
+5. Are snapshot IDs deterministic and based on event hashes plus version lineage?
+6. Do JSONL import/export round-trip without losing Decimal string values or UTC timestamp semantics?
+7. Do events carry `source_system` and `data_scope`?
+8. Does the implementation avoid ICE/PJM/pricing/risk/UI/agent/Nautilus runtime behavior?
+9. Do `python3 scripts/check_plan_freshness.py` and `python3 scripts/check_invariants.py` pass?
+10. Are packets still persistent and current after metadata changes?
 
 ## Blocking findings
 
 Flag as blocking:
 
-- No persistent packet workflow after scaffold changes.
-- Runtime implementation added outside W-001 scope.
-- ICE required for CI/default tests.
-- `icepython` import allowed broadly.
-- Live data, credentials, or local ICE artifacts not protected by gitignore.
-- Package boundaries couple canonical contracts to pandas/DataFrame/framework-specific objects.
-- A second pricing path, write-capable agent tool, or order-submission path appears.
-- Textual UI code imports source adapters directly or embeds business logic.
-- Nautilus becomes required for default CI or replaces the project event/pricing/risk spine before W-N1.
+- Event-store API can mutate or delete accepted events.
+- Bitemporal query ignores either `as_of` or `known_at`.
+- Per-stream ordering is not enforced.
+- Snapshot IDs depend on insertion order, process randomness, or wall-clock time.
+- JSONL output cannot be reimported deterministically.
+- Runtime implementation appears outside `src/ata/events`.
 
 ## Output format
 

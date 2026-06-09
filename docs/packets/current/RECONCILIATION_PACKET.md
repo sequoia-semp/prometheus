@@ -1,7 +1,7 @@
 ---
 packet_type: reconciliation
 packet_status: current
-active_work_item: W-001
+active_work_item: W-007
 last_updated: 2026-06-09
 canonical_sources:
   - docs/packets/current/PLANNING_PACKET.md
@@ -11,7 +11,7 @@ canonical_sources:
   - docs/reviews/REVIEW_LOG.md
 ---
 
-# Reconciliation Packet — W-001 Closeout and Next Loop
+# Reconciliation Packet — W-007 Closeout and Next Loop
 
 ## Purpose
 
@@ -38,18 +38,19 @@ Human/user dispositions
 6. Update `docs/reviews/REVIEW_LOG.md`.
 7. Update `docs/workscope/workscope.yaml` status for W-001.
 8. Refresh current packet metadata and manifest if referenced sources changed.
-9. Select the next active implementation packet, normally W-007 or W-008 depending on whether event store or instrument model should begin first.
+9. Select the next active implementation packet, normally W-008 after W-007 closes.
 
-## W-001 closeout rule
+## W-007 closeout rule
 
-Do not mark W-001 done unless:
+Do not mark W-007 done unless:
 
-- basic project scaffold exists;
-- check/lint/type/test commands are documented;
-- packet freshness check passes;
-- `.ata_local/` and local live data are gitignored;
-- ICE is not required for CI/default tests;
-- no future runtime work was implemented prematurely.
+- append-only event API exists;
+- per-stream ordering is enforced;
+- bitemporal queries by `as_of` and `known_at` are tested;
+- deterministic snapshot IDs are tested;
+- JSONL import/export round-trips are tested;
+- event envelopes carry source/data-scope metadata;
+- no source-adapter, pricing, risk, UI, Nautilus, or agent runtime behavior was added.
 
 ## Disposition table template
 
@@ -61,13 +62,13 @@ Do not mark W-001 done unless:
 
 ```json
 {
-  "closed_work_item": "W-001",
+  "closed_work_item": "W-007",
   "acceptance_status": "met | partial | not_met",
   "findings_dispositioned": [],
   "canonical_files_updated": [],
   "packets_refreshed": [],
   "workscope_status_changes": [],
-  "next_active_work_item": "W-007 | W-008 | other",
+  "next_active_work_item": "W-008 | W-009 | other",
   "remaining_blockers": [],
   "summary": ""
 }

@@ -1,7 +1,7 @@
 packet_manifest_schema: '1.0'
 last_updated: '2026-06-09'
 packet_status: current
-active_work_item: W-001
+active_work_item: W-007
 rule: Current packets must be refreshed when any listed source hash changes.
 source_files:
 - path: AGENTS.md
@@ -33,16 +33,18 @@ source_files:
 - path: docs/contracts/AGENT_TOOLS.md
   sha256: 6885b8b66b0735587517536b8ea67190a5c374013136f9f210150cbfc9a31f08
 - path: docs/workscope/workscope.yaml
-  sha256: 3a99cbf29191280c60a0ecb397fa0358e9292a2219a29aef83cd8c8c20bcb30a
+  sha256: df6d558efdb38b0a1c19e366740c9040fecb2a2e0cd5981951c9efc365ad23c0
 - path: docs/codex/work_items/W-001-repo-scaffold-and-invariant-gates.md
   sha256: aaa4acb95b5e9564056e5ed2dd198f2b6616fab3da416db4ac16d5012b3cf8a0
+- path: docs/codex/work_items/W-007-event-envelope-and-bitemporal-store.md
+  sha256: 74468da8d2892b60d9fe91e62ee822cf9624f085039a18bb8443f6e179334111
 - path: docs/packets/current/PLANNING_PACKET.md
-  sha256: 9621a393d20eacca8226d50796b97a4e21f8ab21774eae66b7c08bae535b45b9
+  sha256: c2c5e279c5f467686ad58f71c05f476a02f47ea4bb9d14c34125c55a878083ed
 - path: docs/packets/current/IMPLEMENTATION_PACKET.md
-  sha256: 1c2f6c2afa02c193a8254a627ba69056479fd6fdc9e1242961c3db4fb92d1bae
+  sha256: 990f0c98928f4fa5ace1ff49e4791a0679f7096e7dfed3496b2e439b2ce2c734
 - path: docs/packets/current/REVIEW_PACKET.md
-  sha256: 49baf1c7bd27d6741e2be75d4ffbd70605536579abda596716aa111f6e19b16c
+  sha256: a1917c6958f151aab05cb187abde89f140c9a28055b52b7c0947842ebd6033d2
 - path: docs/packets/current/RECONCILIATION_PACKET.md
-  sha256: a8784ef6005577678bf557ebd3ad42aa1ad8e7d4148db5102b72f561795d7589
+  sha256: 0f96d2ab16efd556a5463dd3bc8b893e52272cd15414047003ceb8e9f91bf566
 - path: docs/packets/current/LOCAL_ICE_PACKET.md
   sha256: 6684ecbe1312cf7d07e22bc5b665ef4e58fdf631da37b2c4e93220b8d36c03c4

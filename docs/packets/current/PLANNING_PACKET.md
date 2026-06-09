@@ -1,7 +1,7 @@
 ---
 packet_type: planning
 packet_status: current
-active_work_item: W-001
+active_work_item: W-007
 last_updated: 2026-06-09
 canonical_sources:
   - AGENTS.md
@@ -121,8 +121,8 @@ PJM Data Miner
 
 ```text
 W-000  Planning-system reconciliation and packet workflow — done in this start pack
-W-001  Repo scaffold and invariant gates — active/ready
-W-007  Event envelope and bitemporal store
+W-001  Repo scaffold and invariant gates — done
+W-007  Event envelope and bitemporal store — active
 W-008  Generic instrument model
 W-009  Trade blotter and position projection
 W-006  Calendars and expiry service
@@ -138,7 +138,7 @@ W-025  Full read-only semantic agent harness
 
 ## Why this order
 
-- W-001 creates the repo substrate, CI/checks, invariant gates, Textual/agent/Nautilus placeholders, and package boundaries before runtime work.
+- W-001 created the repo substrate, CI/checks, invariant gates, Textual/agent/Nautilus placeholders, and package boundaries before runtime work.
 - W-007 and W-008 establish event and instrument primitives.
 - W-009 comes before W-014 so positions come from a deterministic blotter fold.
 - W-006 supports Henry expiry and future power delivery calendars.

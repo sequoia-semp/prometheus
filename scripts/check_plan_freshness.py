@@ -31,6 +31,7 @@ REQUIRED = [
     "docs/packets/current/LOCAL_ICE_PACKET.md",
     "docs/packets/current/PACKET_MANIFEST.yaml",
     "docs/codex/work_items/W-001-repo-scaffold-and-invariant-gates.md",
+    "docs/codex/work_items/W-007-event-envelope-and-bitemporal-store.md",
 ]
 
 EXPECTED_WORK_ITEMS = {
@@ -94,8 +95,8 @@ def check_workscope(errors: list[str]) -> None:
     if "- id: W-000" in text and "- id: W-001" in text:
         if not re.search(r"- id: W-000\n(?:  .+\n)*?  status: done", text):
             errors.append("W-000 should be marked done in the start pack")
-        if not re.search(r"- id: W-001\n(?:  .+\n)*?  status: ready", text):
-            errors.append("W-001 should be marked ready in the start pack")
+        if not re.search(r"- id: W-001\n(?:  .+\n)*?  status: done", text):
+            errors.append("W-001 should be marked done after scaffold closeout")
 
     for packet in ["PLANNING_PACKET.md", "IMPLEMENTATION_PACKET.md"]:
         p = ROOT / "docs/packets/current" / packet
