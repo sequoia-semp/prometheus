@@ -2,20 +2,27 @@ packet_manifest_schema: '1.0'
 last_updated: '2026-06-09'
 packet_status: current
 active_work_item: W-006
+repository: sequoia-semp/prometheus
+stable_branch: main
+working_branch: codex/workflow-branch-packets
+preferred_branch_convention: codex/<work-item>-<slug>
+packet_scope: branch-local-current
+base_ref: codex/w-006-calendar-expiry
+head_ref: codex/workflow-branch-packets
 rule: Current packets must be refreshed when any listed source hash changes.
 source_files:
 - path: AGENTS.md
-  sha256: a36de09f3c17ada679db777578629921836ea6a34cf591189c41309a44054e6a
+  sha256: 9a87c40c1b0b9d0d222347f246d2eac078154aad17a799d7d179bb6aa24b9e8f
 - path: README.md
-  sha256: 023a9c3ef34bb33df2367349dac2beb3d25ebfc562d7d6573348dc726d3971a7
+  sha256: 8da828aebb7511b90c470fc271bdb80385fca56fb6e3adb7f5dc154a8b76b8b1
 - path: docs/planning/SOURCE_OF_TRUTH.md
-  sha256: 69ce08a8cef40fba319671197043d20ed47437ef26e35c083a6c8451057e42b7
+  sha256: 1a16fc7d968571979298d4eaae59b82f0592425d833631270c5b1b8dfba172cc
 - path: docs/planning/PROJECT_OVERVIEW.md
   sha256: f541cf2196fe4feea3185f4801f8f8103b221433df77c2bb09080e85f8d77207
 - path: docs/planning/OPEN_QUESTIONS.md
   sha256: ab5b82dc55f8a838f5bb5270c0dbe1a254c13d7b6157a31656ea4a9a5f439bd7
 - path: docs/planning/PACKET_WORKFLOW.md
-  sha256: 0abfe2842093f23aa7eadc277dc32eb2794361304b408a277ca8f9a88173922b
+  sha256: 31306a4f11951607210c23a50b3c2950ee0f215dde85c4ece06b109f1e235a65
 - path: docs/local/LOCAL_ICE_CONNECT.md
   sha256: 886dfa0cb041ffd19c91ba1305431cc3d016f7e6ec2fa5cb43c7993cbb0d2ecb
 - path: docs/adr/ADR_INDEX.md
@@ -45,12 +52,12 @@ source_files:
 - path: docs/codex/work_items/W-009-trade-blotter-and-position-projection.md
   sha256: c1d69d20f0116988056b5e608d68ff74e85c3a5787e57658c58682d886169615
 - path: docs/packets/current/PLANNING_PACKET.md
-  sha256: 1f7ba5ab16da40c99763d74d541843e15078fd2d885a069ed7a704eb9e7fb68a
+  sha256: df3787ed05cfcc0a68c502fccab3c76501484458b2d92ab5369380eb92386c4f
 - path: docs/packets/current/IMPLEMENTATION_PACKET.md
-  sha256: 3a8e4ca91d0b009be71b2f3754b1b9348f72de9efdc3b805f78b6bc50b96b02e
+  sha256: 5f6bd26894d13f8f2b2b3a4dbf481e316d0ea45ce20ff46017bee2328321ca7d
 - path: docs/packets/current/REVIEW_PACKET.md
-  sha256: 04c71649ec237b6b16034ec76fc21d773765835a1938e0ed0582a963ed06b0df
+  sha256: 7751bce1edcc6a5d649e1e3ddb757d051a8baec508e2c27b2aae958d5e048c55
 - path: docs/packets/current/RECONCILIATION_PACKET.md
-  sha256: e306b7f4a55b7a1d97e2177ad58b31963220dda2df722a5205471079d70cf062
+  sha256: f19d612f9add5e413c6b3edf930d3e1e145c74c2021f640ecb7193caa9ccee98
 - path: docs/packets/current/LOCAL_ICE_PACKET.md
-  sha256: 6684ecbe1312cf7d07e22bc5b665ef4e58fdf631da37b2c4e93220b8d36c03c4
+  sha256: ad0212224d2b4f2aa34b2700a095a1664c9b9b6bb7c7a013dd5d309e1a29fbb2

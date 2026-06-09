@@ -45,6 +45,8 @@ W-001 will create the runtime scaffold (`pyproject.toml`, `src/ata/**`, `apps/**
 
 Packets are persistent and portable. They exist so planning, coding, review, and reconciliation can move between local LLM instances without requiring each instance to rediscover the repo. Packets are not a second source of truth: they package current working context from canonical repo docs.
 
+Packets are branch-local working context. `main` is stable, user-approved state; `codex` or `codex/<work-item>-<slug>` branches may carry current packets that are ahead of `main`. External review should inspect the coding branch or PR head together with that branch's packets, not `main` packets, unless the review is explicitly about `main`.
+
 ## Local ICE rule
 
 If the user provides a running local ICE Connect/Python instance, W-003 should be able to probe it, build a local field map, sample configured symbols, normalize into event envelopes, and quarantine unmapped fields. Normal CI remains fixture-only and must not require ICE.

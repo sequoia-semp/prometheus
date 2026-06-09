@@ -2,6 +2,13 @@
 packet_type: local_ice
 packet_status: current
 last_updated: 2026-06-09
+repository: sequoia-semp/prometheus
+stable_branch: main
+working_branch: codex/workflow-branch-packets
+preferred_branch_convention: codex/<work-item>-<slug>
+packet_scope: branch-local-current
+base_ref: codex/w-006-calendar-expiry
+head_ref: codex/workflow-branch-packets
 canonical_sources:
   - docs/adr/ADR-015-ice-python-sidecar.md
   - docs/adr/ADR-023-repo-fixture-hygiene-and-local-data-handling.md

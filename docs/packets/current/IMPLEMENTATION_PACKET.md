@@ -3,6 +3,13 @@ packet_type: implementation
 packet_status: current
 active_work_item: W-006
 last_updated: 2026-06-09
+repository: sequoia-semp/prometheus
+stable_branch: main
+working_branch: codex/workflow-branch-packets
+preferred_branch_convention: codex/<work-item>-<slug>
+packet_scope: branch-local-current
+base_ref: codex/w-006-calendar-expiry
+head_ref: codex/workflow-branch-packets
 canonical_sources:
   - AGENTS.md
   - docs/packets/current/PLANNING_PACKET.md

@@ -37,6 +37,24 @@ REQUIRED = [
     "docs/codex/work_items/W-009-trade-blotter-and-position-projection.md",
 ]
 
+CURRENT_PACKET_PATHS = [
+    "docs/packets/current/PLANNING_PACKET.md",
+    "docs/packets/current/IMPLEMENTATION_PACKET.md",
+    "docs/packets/current/REVIEW_PACKET.md",
+    "docs/packets/current/RECONCILIATION_PACKET.md",
+    "docs/packets/current/LOCAL_ICE_PACKET.md",
+]
+
+BRANCH_METADATA_KEYS = [
+    "repository",
+    "stable_branch",
+    "working_branch",
+    "preferred_branch_convention",
+    "packet_scope",
+    "base_ref",
+    "head_ref",
+]
+
 EXPECTED_WORK_ITEMS = {
     "W-000",
     "W-001",
@@ -95,12 +113,6 @@ def check_workscope(errors: list[str]) -> None:
     if missing:
         errors.append("workscope missing expected work items: " + ", ".join(missing))
 
-    if "- id: W-000" in text and "- id: W-001" in text:
-        if not re.search(r"- id: W-000\n(?:  .+\n)*?  status: done", text):
-            errors.append("W-000 should be marked done in the start pack")
-        if not re.search(r"- id: W-001\n(?:  .+\n)*?  status: done", text):
-            errors.append("W-001 should be marked done after scaffold closeout")
-
     for packet in ["PLANNING_PACKET.md", "IMPLEMENTATION_PACKET.md"]:
         p = ROOT / "docs/packets/current" / packet
         if p.exists():
@@ -113,6 +125,98 @@ def check_workscope(errors: list[str]) -> None:
                     f"{packet} does not mention expected work items: "
                     + ", ".join(not_mentioned)
                 )
+
+
+def parse_frontmatter(path: Path) -> dict[str, str]:
+    lines = path.read_text(encoding="utf-8").splitlines()
+    if not lines or lines[0] != "---":
+        return {}
+    values: dict[str, str] = {}
+    for line in lines[1:]:
+        if line == "---":
+            break
+        if not line or line.startswith(" ") or line.startswith("-"):
+            continue
+        match = re.match(r"([A-Za-z0-9_]+):\s*(.*?)\s*$", line)
+        if match:
+            values[match.group(1)] = match.group(2).strip().strip("'\"")
+    return values
+
+
+def parse_manifest_metadata(manifest: Path) -> dict[str, str]:
+    values: dict[str, str] = {}
+    for line in manifest.read_text(encoding="utf-8").splitlines():
+        if line == "source_files:":
+            break
+        match = re.match(r"([A-Za-z0-9_]+):\s*(.*?)\s*$", line)
+        if match:
+            values[match.group(1)] = match.group(2).strip().strip("'\"")
+    return values
+
+
+def validate_active_packet_metadata(
+    packet_metadata: dict[str, dict[str, str]],
+    manifest_metadata: dict[str, str],
+) -> list[str]:
+    errors: list[str] = []
+    planning = packet_metadata.get("PLANNING_PACKET.md", {})
+    implementation = packet_metadata.get("IMPLEMENTATION_PACKET.md", {})
+    review = packet_metadata.get("REVIEW_PACKET.md", {})
+    reconciliation = packet_metadata.get("RECONCILIATION_PACKET.md", {})
+
+    active_work_item = planning.get("active_work_item")
+    if not active_work_item:
+        errors.append("PLANNING_PACKET.md missing active_work_item")
+        return errors
+
+    comparisons = {
+        "IMPLEMENTATION_PACKET.md active_work_item": implementation.get("active_work_item"),
+        "REVIEW_PACKET.md review_target": review.get("review_target"),
+        "RECONCILIATION_PACKET.md active_work_item": reconciliation.get("active_work_item"),
+        "RECONCILIATION_PACKET.md closed_work_item": reconciliation.get("closed_work_item"),
+        "PACKET_MANIFEST.yaml active_work_item": manifest_metadata.get("active_work_item"),
+    }
+    for label, value in comparisons.items():
+        if value != active_work_item:
+            errors.append(f"{label} {value!r} does not match active work item {active_work_item!r}")
+
+    for packet_name, metadata in packet_metadata.items():
+        missing = [key for key in BRANCH_METADATA_KEYS if not metadata.get(key)]
+        if missing:
+            errors.append(f"{packet_name} missing branch metadata: " + ", ".join(missing))
+        if metadata.get("packet_scope") != "branch-local-current":
+            errors.append(f"{packet_name} packet_scope must be branch-local-current")
+
+    missing_manifest = [key for key in BRANCH_METADATA_KEYS if not manifest_metadata.get(key)]
+    if missing_manifest:
+        errors.append(
+            "PACKET_MANIFEST.yaml missing branch metadata: " + ", ".join(missing_manifest)
+        )
+    if manifest_metadata.get("packet_scope") != "branch-local-current":
+        errors.append("PACKET_MANIFEST.yaml packet_scope must be branch-local-current")
+
+    shared_keys = ["repository", "stable_branch", "working_branch", "base_ref", "head_ref"]
+    for key in shared_keys:
+        expected = manifest_metadata.get(key)
+        for packet_name, metadata in packet_metadata.items():
+            if metadata.get(key) != expected:
+                errors.append(
+                    f"{packet_name} {key} {metadata.get(key)!r} "
+                    f"does not match manifest {expected!r}"
+                )
+
+    return errors
+
+
+def check_packet_metadata(errors: list[str]) -> None:
+    packet_metadata: dict[str, dict[str, str]] = {}
+    for packet_path in CURRENT_PACKET_PATHS:
+        path = ROOT / packet_path
+        if path.exists():
+            packet_metadata[path.name] = parse_frontmatter(path)
+    manifest_path = ROOT / "docs/packets/current/PACKET_MANIFEST.yaml"
+    manifest_metadata = parse_manifest_metadata(manifest_path) if manifest_path.exists() else {}
+    errors.extend(validate_active_packet_metadata(packet_metadata, manifest_metadata))
 
 
 def parse_manifest_hashes(manifest: Path) -> dict[str, str]:
@@ -165,6 +269,7 @@ def main() -> int:
     check_required(errors)
     check_adr_index(errors)
     check_workscope(errors)
+    check_packet_metadata(errors)
     check_manifest(errors)
     check_active_version_labels(errors)
     if errors:

@@ -26,6 +26,14 @@ LOCAL_ICE_PACKET.md       local ICE Connect/Python workflow and hygiene
 
 Packets are not a second source of truth. If a packet contradicts an ADR, contract, or workscope row, the packet is stale and must be regenerated or corrected.
 
+## Branch-local authority
+
+Canonical docs are canonical within the branch being inspected. On `codex` or `codex/<work-item>-<slug>` branches, ADRs, contracts, workscope rows, and current packets may describe work that has not yet been merged to `main`.
+
+`main` is stable only after user-approved reconciliation and merge. External review should inspect the coding branch or PR head and its branch-local packets unless the user explicitly asks to inspect `main`.
+
+Packet frontmatter and `PACKET_MANIFEST.yaml` must identify `stable_branch`, `working_branch`, `packet_scope`, `base_ref`, and `head_ref` so planning and review infrastructure can distinguish stable project state from branch-local coding context.
+
 ## User gate
 
 Architecture, scope, autonomy-level, and trading-execution changes require explicit user approval. LLMs, coding agents, and reviewers may propose changes, but they do not make them binding.

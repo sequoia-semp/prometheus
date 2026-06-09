@@ -2,7 +2,15 @@
 packet_type: reconciliation
 packet_status: current
 active_work_item: W-006
+closed_work_item: W-006
 last_updated: 2026-06-09
+repository: sequoia-semp/prometheus
+stable_branch: main
+working_branch: codex/workflow-branch-packets
+preferred_branch_convention: codex/<work-item>-<slug>
+packet_scope: branch-local-current
+base_ref: codex/w-006-calendar-expiry
+head_ref: codex/workflow-branch-packets
 canonical_sources:
   - docs/packets/current/PLANNING_PACKET.md
   - docs/packets/current/IMPLEMENTATION_PACKET.md
@@ -30,13 +38,13 @@ Human/user dispositions
 
 ## Reconciliation steps
 
-1. Identify whether W-001 met acceptance criteria.
+1. Identify whether W-006 met acceptance criteria.
 2. Convert review findings into `accepted`, `rejected`, or `deferred` rows.
 3. For accepted findings, update the relevant canonical file: ADR, contract, workscope, packet workflow, tests/checks, or README/AGENTS.
 4. For rejected findings, add rationale to `docs/reviews/REJECTED_FINDINGS.md`.
 5. For deferred findings, create or update a work item or `OPEN_QUESTIONS.md` row.
 6. Update `docs/reviews/REVIEW_LOG.md`.
-7. Update `docs/workscope/workscope.yaml` status for W-001.
+7. Update `docs/workscope/workscope.yaml` status for W-006.
 8. Refresh current packet metadata and manifest if referenced sources changed.
 9. Select the next active implementation packet, normally W-003 after W-006 closes.
 

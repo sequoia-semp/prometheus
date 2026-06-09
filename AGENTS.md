@@ -20,6 +20,15 @@ Before editing, a coding or review agent must read:
 - Do not treat packet text as overriding ADRs, contracts, or `docs/workscope/workscope.yaml`.
 - When a packet and canonical file disagree, report the drift and update or regenerate the packet.
 
+## Branch and packet policy
+
+- `main` is stable, user-approved project state. Only merge implemented, reviewed, and reconciled work there.
+- `codex` or `codex/<work-item>-<slug>` is the preferred coding-agent branch convention. Branch-local `docs/packets/current/*` files describe that branch's active state and may be ahead of `main`.
+- An existing local branch named `CODEX` should be treated as equivalent to `codex` until it can be renamed.
+- `review/<work-item>-<slug>` and `reconcile/<work-item>-<slug>` may be used for external review or closeout. Review agents should inspect the coding branch or PR head, not `main`, unless explicitly asked to inspect `main`.
+- Local working trees may contain `.ata_local/`, local ICE probe outputs, and temporary packet transfers. These remain uncommitted unless intentionally sanitized and added.
+- Before reviewing or coding, verify the packet frontmatter `working_branch`, `base_ref`, `head_ref`, and `packet_scope`. If these disagree with the branch or PR under review, stop and report packet drift.
+
 ## Project invariants
 
 - The project is a broad local trading and portfolio analytics platform. Henry Hub ICE gas futures/options are the first proving product; PJM remains a featured first-class vertical.
