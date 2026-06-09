@@ -1,73 +1,72 @@
 ---
 packet_type: implementation
 packet_status: current
-active_work_item: W-000B
+active_work_item: W-006
 last_updated: 2026-06-09
 repository: sequoia-semp/prometheus
 stable_branch: main
-working_branch: codex/workflow-branch-packets
+working_branch: codex/w-006-calendar-expiry
 preferred_branch_convention: codex/<work-item>-<slug>
 packet_scope: branch-local-current
-base_ref: codex/w-006-calendar-expiry
-head_ref: codex/workflow-branch-packets
+base_ref: main
+head_ref: codex/w-006-calendar-expiry
 canonical_sources:
   - AGENTS.md
   - README.md
   - docs/planning/SOURCE_OF_TRUTH.md
   - docs/planning/PACKET_WORKFLOW.md
   - docs/workscope/workscope.yaml
-  - docs/codex/work_items/W-000B-branch-local-packet-workflow-hardening.md
+  - docs/codex/work_items/W-006-calendar-and-expiry-service.md
+  - docs/adr/ADR-021-calendars-and-expiry-rules.md
+  - docs/contracts/INSTRUMENT.md
   - docs/packets/current/PLANNING_PACKET.md
   - scripts/check_plan_freshness.py
   - tests/unit/test_packet_workflow.py
 ---
 
-# Implementation Packet — W-000B Branch-local Packet Workflow Hardening
+# Implementation Packet — W-006 Calendar and Expiry Service
 
 ## Task
 
-Reorient this branch as a process/workflow-hardening branch. Define branch-local packet semantics, update packet metadata, remove stale W-001 active-task language, add W-000B workscope/work-item context, and harden freshness checks so future planning/coding/review/reconciliation instances inspect the correct branch state.
+Implement only W-006 calendar and expiry work:
 
-Do not implement W-006 calendar logic or any runtime ICE/PJM/pricing/risk/UI/agent/Nautilus behavior.
+- implement versioned calendars, expiry rules, delivery periods, delivery profiles, and settlement anchors;
+- represent Henry last-trading-day/expiry reproducibly;
+- represent power 5x16 delivery profiles without a schema fork;
+- emit `calendar_version` into relevant outputs;
+- keep date serialization deterministic.
+
+Do not implement ICE, PJM, pricing, risk, Textual screens, Nautilus runtime behavior, or agent business logic.
 
 ## Branch Orientation
 
-Base: `codex/w-006-calendar-expiry`
-Head: `codex/workflow-branch-packets`
-Merge target: `codex/w-006-calendar-expiry`
+Base: `main`
+Head: `codex/w-006-calendar-expiry`
 Stable branch: `main`
-
-Do not merge this branch directly to `main`.
 
 ## Files In Scope
 
 ```text
-AGENTS.md
-README.md
-docs/planning/SOURCE_OF_TRUTH.md
-docs/planning/PACKET_WORKFLOW.md
-docs/workscope/workscope.yaml
-docs/codex/work_items/W-000B-branch-local-packet-workflow-hardening.md
-docs/packets/current/**
-scripts/check_plan_freshness.py
-scripts/check_invariants.py if needed
-tests/unit/test_packet_workflow.py
+src/ata/calendars/**
+tests/unit/**calendar**
+docs/packets/current/** only if metadata needs refreshing
+docs/workscope/workscope.yaml only for active-item status/metadata alignment
+docs/codex/work_items/W-006-calendar-and-expiry-service.md
+scripts/check_*.py only if active-work-item checks need updating
 ```
 
 ## Files Out Of Scope
 
 ```text
-src/ata/calendars/** domain implementation
-src/ata/events/** domain implementation
-src/ata/instruments/** domain implementation
-src/ata/blotter/** domain implementation
 src/ata/pricing/** implementation
 src/ata/risk/** implementation
-src/ata/ice_sidecar/** runtime ICE adapter implementation
-src/ata/pjm/** runtime PJM client implementation
-src/ata/agent/** runtime agent harness implementation
-src/ata/ui_textual/** runtime UI implementation
-src/ata/nautilus/** runtime Nautilus adapter implementation
+src/ata/ice_sidecar/** runtime adapters
+src/ata/pjm/** runtime client
+src/ata/instruments/** changes beyond use of existing IDs/contracts
+src/ata/blotter/** implementation changes
+src/ata/agent/** runtime harness
+src/ata/ui_textual/** screens
+src/ata/nautilus/** runtime adapter
 .ata_local/**
 credentials/**
 tokens/**
@@ -77,14 +76,12 @@ data/live/**
 
 ## Acceptance Criteria
 
-- AGENTS, README, SOURCE_OF_TRUTH, and PACKET_WORKFLOW define main/codex/review/reconcile branch policy.
-- Current packet frontmatter includes branch metadata.
-- Current packets describe W-000B, not W-006 calendar implementation, on this branch.
-- PACKET_MANIFEST.yaml covers all canonical_sources referenced by current packets.
-- Freshness checks detect active-work-item mismatch, missing branch metadata, missing canonical source files, missing manifest coverage, and hash mismatches.
-- Freshness tests cover active-work-item mismatch, branch metadata mismatch, branch-name mismatch, missing canonical source files, missing manifest coverage, and hash mismatches.
-- Stale W-001 active-task language is removed.
-- No W-006 calendar domain implementation or runtime behavior is added.
+- Henry last-trading-day/expiry rule is represented.
+- Settlement anchors are versioned inputs.
+- Power calendars and 5x16 delivery profiles can be versioned.
+- `calendar_version` is emitted into relevant outputs.
+- Default checks pass without ICE Connect/Python, PJM live data, Nautilus, Textual, GitHub Actions, release automation, or local LLM processes.
+- No ICE/PJM/pricing/risk/UI/agent/Nautilus runtime behavior is added.
 
 ## Suggested Commands
 
@@ -102,10 +99,10 @@ uv run pyright
 
 ```json
 {
-  "work_item": "W-000B",
-  "base_ref": "codex/w-006-calendar-expiry",
-  "head_ref": "codex/workflow-branch-packets",
-  "working_branch": "codex/workflow-branch-packets",
+  "work_item": "W-006",
+  "base_ref": "main",
+  "head_ref": "codex/w-006-calendar-expiry",
+  "working_branch": "codex/w-006-calendar-expiry",
   "summary": "",
   "files_changed": [],
   "tests_added": [],

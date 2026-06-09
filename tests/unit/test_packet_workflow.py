@@ -27,15 +27,15 @@ def branch_metadata() -> dict[str, str]:
     return {
         "repository": "sequoia-semp/prometheus",
         "stable_branch": "main",
-        "working_branch": "codex/workflow-branch-packets",
+        "working_branch": "codex/w-006-calendar-expiry",
         "preferred_branch_convention": "codex/<work-item>-<slug>",
         "packet_scope": "branch-local-current",
-        "base_ref": "codex/w-006-calendar-expiry",
-        "head_ref": "codex/workflow-branch-packets",
+        "base_ref": "main",
+        "head_ref": "codex/w-006-calendar-expiry",
     }
 
 
-def packet_metadata(active_work_item: str = "W-000B") -> dict[str, dict[str, str]]:
+def packet_metadata(active_work_item: str = "W-006") -> dict[str, dict[str, str]]:
     shared = branch_metadata()
     return {
         "PLANNING_PACKET.md": {
@@ -60,7 +60,7 @@ def packet_metadata(active_work_item: str = "W-000B") -> dict[str, dict[str, str
 
 
 def test_packet_metadata_validation_accepts_consistent_branch_local_packets() -> None:
-    manifest = {**branch_metadata(), "active_work_item": "W-000B"}
+    manifest = {**branch_metadata(), "active_work_item": "W-006"}
 
     assert validate_active_packet_metadata(packet_metadata(), manifest) == []
 
@@ -68,7 +68,7 @@ def test_packet_metadata_validation_accepts_consistent_branch_local_packets() ->
 def test_packet_metadata_validation_rejects_active_work_item_mismatch() -> None:
     packets = packet_metadata()
     packets["REVIEW_PACKET.md"]["review_target"] = "W-001"
-    manifest = {**branch_metadata(), "active_work_item": "W-000B"}
+    manifest = {**branch_metadata(), "active_work_item": "W-006"}
 
     errors = validate_active_packet_metadata(packets, manifest)
 
@@ -77,8 +77,8 @@ def test_packet_metadata_validation_rejects_active_work_item_mismatch() -> None:
 
 def test_packet_metadata_validation_rejects_reconciliation_target_mismatch() -> None:
     packets = packet_metadata()
-    packets["RECONCILIATION_PACKET.md"]["reconciliation_target"] = "W-006"
-    manifest = {**branch_metadata(), "active_work_item": "W-000B"}
+    packets["RECONCILIATION_PACKET.md"]["reconciliation_target"] = "W-000B"
+    manifest = {**branch_metadata(), "active_work_item": "W-006"}
 
     errors = validate_active_packet_metadata(packets, manifest)
 
@@ -88,7 +88,7 @@ def test_packet_metadata_validation_rejects_reconciliation_target_mismatch() -> 
 def test_packet_metadata_validation_rejects_missing_branch_metadata() -> None:
     packets = packet_metadata()
     del packets["IMPLEMENTATION_PACKET.md"][BRANCH_METADATA_KEYS[0]]
-    manifest = {**branch_metadata(), "active_work_item": "W-000B"}
+    manifest = {**branch_metadata(), "active_work_item": "W-006"}
 
     errors = validate_active_packet_metadata(packets, manifest)
 
@@ -98,7 +98,7 @@ def test_packet_metadata_validation_rejects_missing_branch_metadata() -> None:
 def test_manifest_covers_all_packet_canonical_sources() -> None:
     manifest = parse_manifest_hashes(ROOT / "docs/packets/current/PACKET_MANIFEST.yaml")
 
-    errors = validate_manifest_coverage(canonical_sources_by_packet(), manifest, "W-000B")
+    errors = validate_manifest_coverage(canonical_sources_by_packet(), manifest, "W-006")
 
     assert errors == []
 
@@ -109,7 +109,7 @@ def test_missing_canonical_source_file_is_rejected() -> None:
         "docs/packets/current/PLANNING_PACKET.md": ["docs/nope/MISSING.md"],
     }
 
-    errors = validate_manifest_coverage(packet_sources, manifest, "W-000B")
+    errors = validate_manifest_coverage(packet_sources, manifest, "W-006")
 
     assert any(
         "canonical source missing on disk: docs/nope/MISSING.md" in error for error in errors
@@ -123,7 +123,7 @@ def test_canonical_source_absent_from_manifest_is_rejected() -> None:
         "docs/packets/current/PLANNING_PACKET.md": ["AGENTS.md"],
     }
 
-    errors = validate_manifest_coverage(packet_sources, manifest, "W-000B")
+    errors = validate_manifest_coverage(packet_sources, manifest, "W-006")
 
     assert any("canonical source absent from manifest: AGENTS.md" in error for error in errors)
 
@@ -135,7 +135,7 @@ def test_manifest_hash_mismatch_is_rejected() -> None:
         "docs/packets/current/PLANNING_PACKET.md": ["AGENTS.md"],
     }
 
-    errors = validate_manifest_coverage(packet_sources, manifest, "W-000B")
+    errors = validate_manifest_coverage(packet_sources, manifest, "W-006")
 
     assert any("manifest hash mismatch for canonical source AGENTS.md" in error for error in errors)
 
@@ -149,23 +149,23 @@ def test_current_packet_files_are_manifest_sources() -> None:
 
 
 def test_branch_check_allows_expected_branch() -> None:
-    errors = validate_branch_metadata("codex/workflow-branch-packets", branch_metadata())
+    errors = validate_branch_metadata("codex/w-006-calendar-expiry", branch_metadata())
 
     assert errors == []
 
 
 def test_branch_check_rejects_mismatch() -> None:
-    errors = validate_branch_metadata("codex/w-006-calendar-expiry", branch_metadata())
+    errors = validate_branch_metadata("codex/workflow-branch-packets", branch_metadata())
 
     assert errors == [
-        "current branch 'codex/w-006-calendar-expiry' does not match packet working_branch "
-        "'codex/workflow-branch-packets'"
+        "current branch 'codex/workflow-branch-packets' does not match packet working_branch "
+        "'codex/w-006-calendar-expiry'"
     ]
 
 
 def test_branch_check_skips_when_override_set() -> None:
     errors = validate_branch_metadata(
-        "codex/w-006-calendar-expiry",
+        "codex/workflow-branch-packets",
         branch_metadata(),
         skip=True,
     )

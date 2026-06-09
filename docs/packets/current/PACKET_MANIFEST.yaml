@@ -1,14 +1,14 @@
 packet_manifest_schema: '1.1'
 last_updated: '2026-06-09'
 packet_status: current
-active_work_item: W-000B
+active_work_item: W-006
 repository: sequoia-semp/prometheus
 stable_branch: main
-working_branch: codex/workflow-branch-packets
+working_branch: codex/w-006-calendar-expiry
 preferred_branch_convention: codex/<work-item>-<slug>
 packet_scope: branch-local-current
-base_ref: codex/w-006-calendar-expiry
-head_ref: codex/workflow-branch-packets
+base_ref: main
+head_ref: codex/w-006-calendar-expiry
 rule: Current packets must be refreshed when any listed source hash changes.
 source_files:
 - path: AGENTS.md
@@ -17,30 +17,34 @@ source_files:
   sha256: c5d7422c442f4f2a786b611a08104d8ad4dfa330adee8d1d53cf15035bf5c05b
 - path: docs/adr/ADR-015-ice-python-sidecar.md
   sha256: 2b47024d737251a6cedfe2b1f6d32a9ee8617cb4ee7e616345740ca2a1f5fe4c
+- path: docs/adr/ADR-021-calendars-and-expiry-rules.md
+  sha256: eac6a1f7bd9af9ed5ad1793ac270a57d2005a4e2617487e5c2b3056ddd7c96d8
 - path: docs/adr/ADR-023-repo-fixture-hygiene-and-local-data-handling.md
   sha256: 00f4d0b3546aff918c88afa38f4a0b483ec5817478f43da14347a4d4bec12e8b
 - path: docs/adr/ADR-032-local-data-scope-and-llm-context-policy.md
   sha256: d1a4d97d70c4f29212b8aa320edf111a7edda024876280fcc44d0841a2e7ddc3
 - path: docs/adr/ADR_INDEX.md
   sha256: 58bad4890e89713b34114d71ad9fe3811c2d5d98b1bd3c4b2620a7fb83335765
-- path: docs/codex/work_items/W-000B-branch-local-packet-workflow-hardening.md
-  sha256: d370b3db63aa3560c8c8b99fdc39ac1f820dea22b032200900530ff33cba10f7
+- path: docs/codex/work_items/W-006-calendar-and-expiry-service.md
+  sha256: e31d1bdc80513a29687ace66ecdc2e35722c9779dfe710a51f9ab1fdadcecf2f
 - path: docs/contracts/ICE_PYTHON_SIDECAR.md
   sha256: c73ba05a365400cb7c58afbda5d651d3a13e345b73927c33b5abfcc492f5c153
+- path: docs/contracts/INSTRUMENT.md
+  sha256: bda954e41e3a5c34cc56aa6fc03d1ffa821690f564f80637c07295287240f0c6
 - path: docs/contracts/README.md
   sha256: efc11d26bde477a056effba645fc6ca392c7ac53537cd6628b93f07abcaee746
 - path: docs/local/LOCAL_ICE_CONNECT.md
   sha256: 886dfa0cb041ffd19c91ba1305431cc3d016f7e6ec2fa5cb43c7993cbb0d2ecb
 - path: docs/packets/current/IMPLEMENTATION_PACKET.md
-  sha256: 41badf23fc8e01d1847a5c7f9b1f64cd51c136ee5257996908bffc46172622dd
+  sha256: e0863df1c92e7e214f36a87d07c9765a305c0b107a9241ea19f718fde89317f6
 - path: docs/packets/current/LOCAL_ICE_PACKET.md
-  sha256: ad0212224d2b4f2aa34b2700a095a1664c9b9b6bb7c7a013dd5d309e1a29fbb2
+  sha256: 767b58c8d4fd84774977b7a58d7abd11a3ebd7743cdd5d72f7e0aa68da6aea95
 - path: docs/packets/current/PLANNING_PACKET.md
-  sha256: 32b710d0b4ce25eb521080cce70b1c16dd7a51dbca2c5c7463a7978c7028768f
+  sha256: 349601d9ada25d83062e43baaa6dd2120c789a0b808751aa2d311dc5840d010e
 - path: docs/packets/current/RECONCILIATION_PACKET.md
-  sha256: 046da434889cd21770b48885770a73748c5d9f5534e7566deadbb7457a3caff6
+  sha256: 6e9b82fee2c93e81d949a6e12b4c94f1e855d5080a17ad08f88096cce3a1a65d
 - path: docs/packets/current/REVIEW_PACKET.md
-  sha256: 423daf02fe68fa94f522c6a34b0dfaba91ffb144f25553387a59a5712217af65
+  sha256: fc62f689c37b73f776cc5b578f5f1622860724122b06f8459b1e60b6eb5632f5
 - path: docs/planning/OPEN_QUESTIONS.md
   sha256: ab5b82dc55f8a838f5bb5270c0dbe1a254c13d7b6157a31656ea4a9a5f439bd7
 - path: docs/planning/PACKET_WORKFLOW.md
@@ -52,8 +56,8 @@ source_files:
 - path: docs/reviews/REVIEW_LOG.md
   sha256: a201dd5e4aea744ffa25e56a0a0572ceedbe85e9ba61c4c6fde07c8008cd1616
 - path: docs/workscope/workscope.yaml
-  sha256: 33dce058ade568e19a730130349a8369d9b1043083da3e1013b0bb8b934d5fba
+  sha256: ac08c50551191bbb771444a0ed9736c1925c952b29d6f0a051750586f4f44058
 - path: scripts/check_plan_freshness.py
   sha256: 6dbffbc9600e8314c4563a9d12f61cb717181d63f079256267f514c40780f2e4
 - path: tests/unit/test_packet_workflow.py
-  sha256: a678f4a52a220d29d3f36812aeba9c76b515dca4908d100657a3bc68589ec087
+  sha256: e65cf3c2ca6d76bc423abb34a506e57d4087abd13ff61c4af4f9fad43bbea919

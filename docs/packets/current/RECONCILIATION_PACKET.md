@@ -1,16 +1,16 @@
 ---
 packet_type: reconciliation
 packet_status: current
-active_work_item: W-000B
-reconciliation_target: W-000B
+active_work_item: W-006
+reconciliation_target: W-006
 last_updated: 2026-06-09
 repository: sequoia-semp/prometheus
 stable_branch: main
-working_branch: codex/workflow-branch-packets
+working_branch: codex/w-006-calendar-expiry
 preferred_branch_convention: codex/<work-item>-<slug>
 packet_scope: branch-local-current
-base_ref: codex/w-006-calendar-expiry
-head_ref: codex/workflow-branch-packets
+base_ref: main
+head_ref: codex/w-006-calendar-expiry
 canonical_sources:
   - AGENTS.md
   - README.md
@@ -21,15 +21,18 @@ canonical_sources:
   - docs/packets/current/REVIEW_PACKET.md
   - docs/workscope/workscope.yaml
   - docs/reviews/REVIEW_LOG.md
+  - docs/codex/work_items/W-006-calendar-and-expiry-service.md
   - scripts/check_plan_freshness.py
   - tests/unit/test_packet_workflow.py
 ---
 
-# Reconciliation Packet — W-000B Closeout and Return to W-006
+# Reconciliation Packet — W-006 Calendar and Expiry Service
 
 ## Purpose
 
-Use this packet after W-000B coding and review outputs are available. Its job is to close the branch-local packet workflow hardening task without losing decisions in chat transcripts.
+Use this packet after W-006 coding and review outputs are available. Its job is to close the calendar and expiry service work item, disposition review findings, and select the next active packet set.
+
+The next active item after W-006 will normally be W-003 unless review or reconciliation chooses otherwise.
 
 ## Required Inputs
 
@@ -44,28 +47,27 @@ Human/user dispositions
 
 ## Reconciliation Steps
 
-1. Identify whether W-000B met acceptance criteria.
+1. Identify whether W-006 met acceptance criteria.
 2. Convert review findings into `accepted`, `rejected`, or `deferred` rows.
 3. For accepted findings, update the relevant canonical file: ADR, contract, workscope, packet workflow, tests/checks, or README/AGENTS.
 4. For rejected findings, add rationale to `docs/reviews/REJECTED_FINDINGS.md`.
 5. For deferred findings, create or update a work item or `OPEN_QUESTIONS.md` row.
 6. Update `docs/reviews/REVIEW_LOG.md`.
-7. Update `docs/workscope/workscope.yaml` status for W-000B.
+7. Update `docs/workscope/workscope.yaml` status for W-006.
 8. Refresh current packet metadata and manifest if referenced sources changed.
-9. Merge into `codex/w-006-calendar-expiry`, not `main`.
-10. After merge, refresh the W-006 branch packets so W-006 is active again.
+9. Select the next active work item, normally W-003.
 
-## W-000B Closeout Rule
+## W-006 Closeout Rule
 
-Do not mark W-000B done unless:
+Do not mark W-006 done unless:
 
-- branch-local packet policy is documented;
-- current packets carry branch metadata;
-- implementation/review/reconciliation packets are W-000B-specific on this branch;
-- manifest coverage includes every current packet canonical_source;
-- freshness checks and tests pass;
-- stale W-001 active-task language is removed;
-- no W-006 calendar domain implementation or runtime behavior was added.
+- Henry last-trading-day/expiry rule is represented reproducibly;
+- settlement anchors are explicit versioned inputs;
+- power 5x16 delivery profiles can be represented without schema fork;
+- relevant outputs carry `calendar_version`;
+- dates serialize deterministically;
+- packet freshness, invariant, unit, lint, and type checks pass;
+- no ICE/PJM/pricing/risk/UI/agent/Nautilus runtime behavior was added.
 
 ## Disposition Table Template
 
@@ -77,15 +79,14 @@ Do not mark W-000B done unless:
 
 ```json
 {
-  "closed_work_item": "W-000B",
+  "closed_work_item": "W-006",
   "acceptance_status": "met | partial | not_met",
   "findings_dispositioned": [],
   "canonical_files_updated": [],
   "packets_refreshed": [],
   "workscope_status_changes": [],
-  "next_active_work_item": "W-006",
-  "merge_target": "codex/w-006-calendar-expiry",
-  "post_merge_refresh_required": true,
+  "next_active_work_item": "W-003",
+  "merge_target": "main",
   "remaining_blockers": [],
   "summary": ""
 }

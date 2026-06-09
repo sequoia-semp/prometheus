@@ -44,7 +44,7 @@ work_items:
   title: Branch-local packet workflow hardening
   milestone: M0
   priority: P0
-  status: active
+  status: done
   depends_on: [W-000]
   objective: Clarify branch-local packet semantics, PR/review branch targeting, packet metadata, manifest coverage, and freshness checks so coding/review instances inspect the correct branch state.
   adrs: [ADR-024]
@@ -133,8 +133,8 @@ work_items:
   title: Calendar and expiry service
   milestone: M1
   priority: P0
-  status: ready
-  branch_note: Temporarily ready/paused while W-000B is active on codex/workflow-branch-packets; returns to active after W-000B merges into codex/w-006-calendar-expiry.
+  status: active
+  branch_note: Active domain work item after W-000B process-hardening closeout.
   depends_on: [W-008]
   objective: Implement versioned calendars, expiry rules, delivery periods, and settlement anchors.
   adrs: [ADR-021]

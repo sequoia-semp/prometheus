@@ -4,11 +4,11 @@ packet_status: current
 last_updated: 2026-06-09
 repository: sequoia-semp/prometheus
 stable_branch: main
-working_branch: codex/workflow-branch-packets
+working_branch: codex/w-006-calendar-expiry
 preferred_branch_convention: codex/<work-item>-<slug>
 packet_scope: branch-local-current
-base_ref: codex/w-006-calendar-expiry
-head_ref: codex/workflow-branch-packets
+base_ref: main
+head_ref: codex/w-006-calendar-expiry
 canonical_sources:
   - docs/adr/ADR-015-ice-python-sidecar.md
   - docs/adr/ADR-023-repo-fixture-hygiene-and-local-data-handling.md

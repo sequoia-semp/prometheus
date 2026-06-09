@@ -1,15 +1,15 @@
 ---
 packet_type: planning
 packet_status: current
-active_work_item: W-000B
+active_work_item: W-006
 last_updated: 2026-06-09
 repository: sequoia-semp/prometheus
 stable_branch: main
-working_branch: codex/workflow-branch-packets
+working_branch: codex/w-006-calendar-expiry
 preferred_branch_convention: codex/<work-item>-<slug>
 packet_scope: branch-local-current
-base_ref: codex/w-006-calendar-expiry
-head_ref: codex/workflow-branch-packets
+base_ref: main
+head_ref: codex/w-006-calendar-expiry
 canonical_sources:
   - AGENTS.md
   - README.md
@@ -128,12 +128,12 @@ PJM Data Miner
 
 ```text
 W-000  Planning-system reconciliation and packet workflow — done in this start pack
-W-000B Branch-local packet workflow hardening — active on codex/workflow-branch-packets
+W-000B Branch-local packet workflow hardening — done
 W-001  Repo scaffold and invariant gates — done
 W-007  Event envelope and bitemporal store — done
 W-008  Generic instrument model — done
 W-009  Trade blotter and position projection — done
-W-006  Calendars and expiry service — ready/paused; resumes after W-000B merge
+W-006  Calendars and expiry service — active
 W-003  ICE Python sidecar fixture/local-live boundary
 W-014  Henry futures/options golden book: PV, Greeks, PnL, VaR
 W-026  Fixture-backed read-only agent loop
