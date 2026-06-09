@@ -409,6 +409,39 @@ def check_branch(errors: list[str]) -> None:
     )
 
 
+def validate_handoff_contract_text(root: Path = ROOT) -> list[str]:
+    required_text = {
+        "docs/packets/current/IMPLEMENTATION_PACKET.md": [
+            "implementation_base_commit",
+            "implementation_head_commit",
+            "changed_files",
+            "Paste this to the adversarial reviewer",
+            "After review, paste this to the reconciliation/planning instance",
+        ],
+        "docs/packets/current/REVIEW_PACKET.md": [
+            "coding-agent final JSON/handoff",
+        ],
+        "docs/packets/current/RECONCILIATION_PACKET.md": [
+            "coding-agent final JSON/handoff",
+        ],
+    }
+    errors: list[str] = []
+    for relative_path, snippets in required_text.items():
+        path = root / relative_path
+        if not path.exists():
+            errors.append(f"handoff contract source missing: {relative_path}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        for snippet in snippets:
+            if snippet not in text:
+                errors.append(f"{relative_path} missing handoff contract text: {snippet}")
+    return errors
+
+
+def check_handoff_contract(errors: list[str]) -> None:
+    errors.extend(validate_handoff_contract_text())
+
+
 def check_active_version_labels(errors: list[str]) -> None:
     # Avoid release-style planning tags in active planning/packet filenames.
     active_paths = list((ROOT / "docs").rglob("*.md")) + [ROOT / "README.md"]
@@ -435,6 +468,7 @@ def main() -> int:
     check_manifest_coverage(errors, active_work_item)
     check_manifest(errors)
     check_branch(errors)
+    check_handoff_contract(errors)
     check_active_version_labels(errors)
     if errors:
         print("Planning/packet checks failed:")

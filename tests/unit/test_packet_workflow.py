@@ -20,6 +20,7 @@ canonical_sources_by_packet = CHECK_PLAN_FRESHNESS.canonical_sources_by_packet
 parse_manifest_hashes = CHECK_PLAN_FRESHNESS.parse_manifest_hashes
 validate_active_packet_metadata = CHECK_PLAN_FRESHNESS.validate_active_packet_metadata
 validate_branch_metadata = CHECK_PLAN_FRESHNESS.validate_branch_metadata
+validate_handoff_contract_text = CHECK_PLAN_FRESHNESS.validate_handoff_contract_text
 validate_manifest_coverage = CHECK_PLAN_FRESHNESS.validate_manifest_coverage
 
 
@@ -177,6 +178,46 @@ def test_branch_check_skips_detached_head() -> None:
     errors = validate_branch_metadata(None, branch_metadata())
 
     assert errors == []
+
+
+def test_implementation_packet_contains_review_handoff_fields() -> None:
+    text = (ROOT / "docs/packets/current/IMPLEMENTATION_PACKET.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "implementation_base_commit" in text
+    assert "implementation_head_commit" in text
+    assert "changed_files" in text
+    assert "Paste this to the adversarial reviewer" in text
+
+
+def test_implementation_packet_contains_reconciliation_handoff_fields() -> None:
+    text = (ROOT / "docs/packets/current/IMPLEMENTATION_PACKET.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "After review, paste this to the reconciliation/planning instance" in text
+    assert "reconciliation_packet_path" in text
+
+
+def test_review_packet_requires_coding_agent_handoff() -> None:
+    text = (ROOT / "docs/packets/current/REVIEW_PACKET.md").read_text(encoding="utf-8")
+
+    assert "coding-agent final JSON/handoff" in text
+    assert "the declared implementation diff or commit range" in text
+
+
+def test_reconciliation_packet_requires_coding_agent_handoff() -> None:
+    text = (ROOT / "docs/packets/current/RECONCILIATION_PACKET.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "coding-agent final JSON/handoff" in text
+    assert "review JSON/result" in text
+
+
+def test_handoff_contract_text_validation_passes_current_packets() -> None:
+    assert validate_handoff_contract_text(ROOT) == []
 
 
 def test_packet_freshness_script_passes_current_repo_packets() -> None:

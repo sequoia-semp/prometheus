@@ -34,13 +34,26 @@ Use this packet after W-006 coding and review outputs are available. Its job is 
 
 The next active item after W-006 will normally be W-003 unless review or reconciliation chooses otherwise.
 
+## Required Closeout Inputs
+
+A reconciliation instance should receive:
+
+- `AGENTS.md`;
+- `docs/packets/current/PLANNING_PACKET.md`;
+- `docs/packets/current/RECONCILIATION_PACKET.md`;
+- coding-agent final JSON/handoff;
+- review JSON/result;
+- human/user dispositions.
+
+If the coding-agent handoff lacks branch, commit range, changed files, tests, or packet paths, record that as a process finding and decide whether it blocks closeout.
+
 ## Required Inputs
 
 ```text
 AGENTS.md
 docs/packets/current/PLANNING_PACKET.md
 docs/packets/current/IMPLEMENTATION_PACKET.md
-Coding-agent JSON summary
+Coding-agent final JSON/handoff
 Review JSON result
 Human/user dispositions
 ```

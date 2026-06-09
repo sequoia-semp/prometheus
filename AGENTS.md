@@ -63,20 +63,60 @@ uv run ruff check .
 uv run pyright
 ```
 
-## Expected coding-agent response
+## Required implementation handoff
 
-Use structured JSON in final responses for implementation tasks:
+At the end of every implementation pass, the coding agent must return:
+
+1. structured JSON for machine-readable closeout; and
+2. a plain-text handoff block that the human operator can paste into a planning, review, or adversarial-review instance.
+
+The handoff must identify the exact branch and review range. It must not assume reviewers will inspect `main` unless `main` is the declared head.
+
+Required fields:
+
+- repository;
+- work_item;
+- working_branch;
+- base_ref;
+- head_ref;
+- implementation_base_commit, when available;
+- implementation_head_commit, when available;
+- changed_files;
+- tests_run;
+- tests_not_run;
+- acceptance_status;
+- out_of_scope_changes;
+- known_risks;
+- packet read order for coding/review/reconciliation;
+- copy/paste adversarial-review prompt;
+- copy/paste reconciliation prompt.
+
+For coding branches, reviewers should inspect the branch or PR head named in packet metadata, not stale `main` packet state. If the implementation changed packet metadata or current packets, the final handoff must state whether `python3 scripts/check_plan_freshness.py` passed.
+
+Use this structured JSON shape in final responses for implementation tasks:
 
 ```json
 {
+  "repository": "",
   "work_item": "",
+  "working_branch": "",
+  "base_ref": "",
+  "head_ref": "",
+  "implementation_base_commit": "",
+  "implementation_head_commit": "",
   "summary": "",
+  "changed_files": [],
   "files_changed": [],
   "tests_added": [],
   "tests_run": [],
+  "tests_not_run": [],
   "acceptance_status": "met | partial | not_met",
   "out_of_scope_changes": [],
   "open_questions": [],
-  "risks": []
+  "risks": [],
+  "review_packet_path": "docs/packets/current/REVIEW_PACKET.md",
+  "planning_packet_path": "docs/packets/current/PLANNING_PACKET.md",
+  "implementation_packet_path": "docs/packets/current/IMPLEMENTATION_PACKET.md",
+  "reconciliation_packet_path": "docs/packets/current/RECONCILIATION_PACKET.md"
 }
 ```

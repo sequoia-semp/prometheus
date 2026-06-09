@@ -80,6 +80,7 @@ Goal/change request
   -> explicit user approval for architecture/scope/autonomy/trading-control changes
   -> active implementation packet
   -> coding agent implements one work item
+  -> coding agent returns JSON + paste-ready review/reconciliation handoff
   -> tests and freshness checks
   -> active review packet plus diff/summary
   -> findings accepted/rejected/deferred
@@ -112,10 +113,11 @@ For a review instance, pass:
 AGENTS.md
 docs/packets/current/PLANNING_PACKET.md
 docs/packets/current/REVIEW_PACKET.md
-coding-agent JSON summary or diff
+coding-agent final JSON/handoff
+declared implementation diff or commit range
 ```
 
-The diff should come from the coding branch or PR head named in packet metadata. Do not compare against `main` merely because `main` is the stable branch; use the declared `base_ref`/`head_ref` unless the user asks for a different comparison.
+The coding-agent handoff travels with the review packet. The diff should come from the coding branch or PR head named in packet metadata. Do not compare against `main` merely because `main` is the stable branch; use the declared `base_ref`/`head_ref` unless the user asks for a different comparison.
 
 For local ICE work, additionally pass:
 

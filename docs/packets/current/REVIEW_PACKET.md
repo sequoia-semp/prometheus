@@ -38,6 +38,18 @@ Head: `codex/w-006-calendar-expiry`
 
 Do not compare against unrelated `main` state or stale packet metadata. First verify packet `working_branch`, `base_ref`, `head_ref`, and `packet_scope`.
 
+## Required Review Inputs
+
+A review instance should receive:
+
+- `AGENTS.md`;
+- `docs/packets/current/PLANNING_PACKET.md`;
+- `docs/packets/current/REVIEW_PACKET.md`;
+- coding-agent final JSON/handoff;
+- the declared implementation diff or commit range.
+
+If the coding-agent handoff is missing branch, base/head, changed files, or tests run, flag that as a review-process finding before assessing implementation quality.
+
 ## Review Questions
 
 1. Are calendars, expiry rules, delivery profiles, and settlement anchors represented as versioned domain inputs?

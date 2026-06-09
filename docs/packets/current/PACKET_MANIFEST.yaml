@@ -12,7 +12,7 @@ head_ref: codex/w-006-calendar-expiry
 rule: Current packets must be refreshed when any listed source hash changes.
 source_files:
 - path: AGENTS.md
-  sha256: 4f642b4d434a178614d4151df96cfe0891224cd6b4b73bffc19b2a241c26b422
+  sha256: 97a2783d71594ae8a47f85498b3e0b7006e16c130eec24ad6c4df856a8b1ddcd
 - path: README.md
   sha256: c5d7422c442f4f2a786b611a08104d8ad4dfa330adee8d1d53cf15035bf5c05b
 - path: docs/adr/ADR-015-ice-python-sidecar.md
@@ -36,19 +36,21 @@ source_files:
 - path: docs/local/LOCAL_ICE_CONNECT.md
   sha256: 886dfa0cb041ffd19c91ba1305431cc3d016f7e6ec2fa5cb43c7993cbb0d2ecb
 - path: docs/packets/current/IMPLEMENTATION_PACKET.md
-  sha256: e0863df1c92e7e214f36a87d07c9765a305c0b107a9241ea19f718fde89317f6
+  sha256: d7ed19b487ab70f64ef86c8d2c214e300d5f35177318358290d9949a1013fe0d
 - path: docs/packets/current/LOCAL_ICE_PACKET.md
   sha256: 767b58c8d4fd84774977b7a58d7abd11a3ebd7743cdd5d72f7e0aa68da6aea95
 - path: docs/packets/current/PLANNING_PACKET.md
   sha256: 349601d9ada25d83062e43baaa6dd2120c789a0b808751aa2d311dc5840d010e
 - path: docs/packets/current/RECONCILIATION_PACKET.md
-  sha256: 6e9b82fee2c93e81d949a6e12b4c94f1e855d5080a17ad08f88096cce3a1a65d
+  sha256: c28e82e42addab3c4af6d00ebd01babc64076008219148f382f0af96f1ced686
 - path: docs/packets/current/REVIEW_PACKET.md
-  sha256: fc62f689c37b73f776cc5b578f5f1622860724122b06f8459b1e60b6eb5632f5
+  sha256: 8046535cfb75b894020d17f3cc7b866d04eaf31754e5f759eac52b46c1baec10
+- path: docs/packets/templates/IMPLEMENTATION_PACKET_TEMPLATE.md
+  sha256: eb0958a0d2b544f5677f531d4d2eccaf6fabe87035b854e0fa4086a30b58cf8a
 - path: docs/planning/OPEN_QUESTIONS.md
   sha256: ab5b82dc55f8a838f5bb5270c0dbe1a254c13d7b6157a31656ea4a9a5f439bd7
 - path: docs/planning/PACKET_WORKFLOW.md
-  sha256: 6e0b44e1cfbb37b5bf245771cd39f3f14816a8cd268e009de6308b110e680624
+  sha256: 2a6897bd8989d295134c413a78aab9ab560dc54ddefc516f8b65a6cf0c4c3472
 - path: docs/planning/PROJECT_OVERVIEW.md
   sha256: f541cf2196fe4feea3185f4801f8f8103b221433df77c2bb09080e85f8d77207
 - path: docs/planning/SOURCE_OF_TRUTH.md
@@ -58,6 +60,6 @@ source_files:
 - path: docs/workscope/workscope.yaml
   sha256: ac08c50551191bbb771444a0ed9736c1925c952b29d6f0a051750586f4f44058
 - path: scripts/check_plan_freshness.py
-  sha256: 6dbffbc9600e8314c4563a9d12f61cb717181d63f079256267f514c40780f2e4
+  sha256: e973911d4acabb37beee803c77ec6e679bdf795a4937275c466d2df01a475d1b
 - path: tests/unit/test_packet_workflow.py
-  sha256: e65cf3c2ca6d76bc423abb34a506e57d4087abd13ff61c4af4f9fad43bbea919
+  sha256: a1dd6da9e8b75b467f329075cfee19177f72c3abfde9c92ec65af4ffeb868a51
