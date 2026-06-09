@@ -1,0 +1,48 @@
+packet_manifest_schema: '1.0'
+last_updated: '2026-06-09'
+packet_status: current
+active_work_item: W-001
+rule: Current packets must be refreshed when any listed source hash changes.
+source_files:
+- path: AGENTS.md
+  sha256: a36de09f3c17ada679db777578629921836ea6a34cf591189c41309a44054e6a
+- path: README.md
+  sha256: 023a9c3ef34bb33df2367349dac2beb3d25ebfc562d7d6573348dc726d3971a7
+- path: docs/planning/SOURCE_OF_TRUTH.md
+  sha256: 69ce08a8cef40fba319671197043d20ed47437ef26e35c083a6c8451057e42b7
+- path: docs/planning/PROJECT_OVERVIEW.md
+  sha256: f541cf2196fe4feea3185f4801f8f8103b221433df77c2bb09080e85f8d77207
+- path: docs/planning/OPEN_QUESTIONS.md
+  sha256: ab5b82dc55f8a838f5bb5270c0dbe1a254c13d7b6157a31656ea4a9a5f439bd7
+- path: docs/planning/PACKET_WORKFLOW.md
+  sha256: 0abfe2842093f23aa7eadc277dc32eb2794361304b408a277ca8f9a88173922b
+- path: docs/local/LOCAL_ICE_CONNECT.md
+  sha256: 886dfa0cb041ffd19c91ba1305431cc3d016f7e6ec2fa5cb43c7993cbb0d2ecb
+- path: docs/adr/ADR_INDEX.md
+  sha256: 58bad4890e89713b34114d71ad9fe3811c2d5d98b1bd3c4b2620a7fb83335765
+- path: docs/adr/ADR-014-nautilus-runtime-spine.md
+  sha256: cd6b7bac001aa4e308f59953467cf110bfb789ce181f2beb9bb0714d6cb6b9a9
+- path: docs/adr/ADR-025-agent-autonomy-ladder.md
+  sha256: 31ff977ebd21406914a6ec307a52f18d00e5e63e324586d0626a342e25c8b0ee
+- path: docs/adr/ADR-037-platform-scope-demo-products-ui-and-local-llm.md
+  sha256: 4038124353b6887c6e14af48e1a956ae5897f6202c106781ab8082185028912c
+- path: docs/contracts/README.md
+  sha256: efc11d26bde477a056effba645fc6ca392c7ac53537cd6628b93f07abcaee746
+- path: docs/contracts/AGENT_LOOP.md
+  sha256: 094a4d1ef2aee986f28d346c2d37d306fffe0472b0f05525c7816f805000edec
+- path: docs/contracts/AGENT_TOOLS.md
+  sha256: 6885b8b66b0735587517536b8ea67190a5c374013136f9f210150cbfc9a31f08
+- path: docs/workscope/workscope.yaml
+  sha256: 3a99cbf29191280c60a0ecb397fa0358e9292a2219a29aef83cd8c8c20bcb30a
+- path: docs/codex/work_items/W-001-repo-scaffold-and-invariant-gates.md
+  sha256: aaa4acb95b5e9564056e5ed2dd198f2b6616fab3da416db4ac16d5012b3cf8a0
+- path: docs/packets/current/PLANNING_PACKET.md
+  sha256: 9621a393d20eacca8226d50796b97a4e21f8ab21774eae66b7c08bae535b45b9
+- path: docs/packets/current/IMPLEMENTATION_PACKET.md
+  sha256: 1c2f6c2afa02c193a8254a627ba69056479fd6fdc9e1242961c3db4fb92d1bae
+- path: docs/packets/current/REVIEW_PACKET.md
+  sha256: 49baf1c7bd27d6741e2be75d4ffbd70605536579abda596716aa111f6e19b16c
+- path: docs/packets/current/RECONCILIATION_PACKET.md
+  sha256: a8784ef6005577678bf557ebd3ad42aa1ad8e7d4148db5102b72f561795d7589
+- path: docs/packets/current/LOCAL_ICE_PACKET.md
+  sha256: 6684ecbe1312cf7d07e22bc5b665ef4e58fdf631da37b2c4e93220b8d36c03c4

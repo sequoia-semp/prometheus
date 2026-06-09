@@ -1,0 +1,29 @@
+# Local/private runtime state
+.github/
+.ata_local/
+credentials/
+tokens/
+secrets/
+data/live/
+data/local_live/
+tests/live/.env
+
+# Python/cache/build
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+dist/
+*.pyc
+*.egg-info/
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
+# Local-only live data / secrets
+*.env
+*.pem
+*.key
+*.token

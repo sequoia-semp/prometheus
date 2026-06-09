@@ -1,0 +1,255 @@
+schema_version: '1.0'
+last_updated: '2026-06-09'
+source_of_truth: true
+work_items:
+- id: W-000
+  title: Planning-system reconciliation and packet workflow
+  milestone: M0
+  priority: P0
+  status: done
+  depends_on: []
+  objective: Install repo-persistent planning, review, implementation, reconciliation, and local ICE packet workflow without runtime code.
+  adrs: [ADR-024]
+  contracts: []
+  deliverables:
+  - docs/planning/**
+  - docs/adr/**
+  - docs/contracts/**
+  - docs/reviews/**
+  - docs/codex/**
+  - docs/packets/**
+  - docs/workscope/workscope.yaml
+  - AGENTS.md
+  - scripts/check_plan_freshness.py
+  - scripts/build_packet_bundle.py
+  acceptance:
+  - No active filenames or canonical docs use release-style planning version labels.
+  - Planning, implementation, review, reconciliation, and local ICE packets persist in docs/packets/current/.
+  - PACKET_MANIFEST.yaml exists and lists current packet source files and hashes.
+  - README and AGENTS.md point agents to the packet read order.
+  - ADR_INDEX references only ADR files that exist.
+  - workscope.yaml includes W-000, W-001, W-007, W-008, W-009, W-006, W-003, W-014, W-026, W-016, W-005, W-015, W-N1, W-025.
+  - Event envelope, instrument, pricer, risk, revaluation, blotter, agent, PJM, and ICE contracts agree with ADRs.
+  - Local licensed-user ICE workflow is supported by docs and packet instructions.
+  - No runtime code is implemented.
+  out_of_scope:
+  - runtime ICE Python integration
+  - pricing implementation
+  - event-store implementation
+  - PJM client implementation
+  - Nautilus implementation
+  - agent runtime implementation
+
+- id: W-001
+  title: Repo scaffold and invariant gates
+  milestone: M0
+  priority: P0
+  status: ready
+  depends_on: [W-000]
+  objective: Create the local-first repo scaffold, test placeholders, invariant checks, git hygiene, Textual-compatible UI boundary, local LLM agent boundary, and Nautilus placeholder boundary.
+  adrs: [ADR-015, ADR-019, ADR-023, ADR-024, ADR-027, ADR-037]
+  contracts: [EVENT_ENVELOPE.md]
+  acceptance:
+  - Local-first Python workspace scaffold exists with clear Rust/Nautilus-compatible boundaries.
+  - Scaffold reserves Textual-compatible app/UI boundaries without implementing business logic in the UI layer.
+  - Scaffold reserves local opencode/Ollama agent adapter boundaries without exposing write, order, credential, arbitrary SQL, or shell-execution tools.
+  - Scaffold reserves Nautilus replay/integration boundaries without making Nautilus a required dependency or authoritative runtime.
+  - Lint/type/unit test placeholder commands run locally without GitHub Actions or release automation.
+  - icepython-import ban outside sidecar is checked.
+  - .ata_local/, credentials, and raw local data paths are gitignored.
+  - Packet freshness check runs and fails on current-packet/source mismatch.
+  - Invariant checks cover no second pricing path and no agent write tools where applicable.
+
+- id: W-007
+  title: Event envelope and bitemporal store
+  milestone: M1
+  priority: P0
+  status: planned
+  depends_on: [W-000, W-001]
+  objective: Implement append-only event envelopes and local bitemporal store.
+  adrs: [ADR-027, ADR-032]
+  contracts: [EVENT_ENVELOPE.md]
+  acceptance:
+  - Append-only event API exists.
+  - Per-stream ordering works.
+  - Bitemporal query by as_of and known_at works.
+  - Snapshot IDs are deterministic.
+  - Envelope carries source_system and data_scope.
+  - JSONL import/export exists for local sidecar/spool compatibility.
+
+- id: W-008
+  title: Generic instrument model
+  milestone: M1
+  priority: P0
+  status: planned
+  depends_on: [W-000, W-001]
+  objective: Implement generic commodity instrument identities and multiplier policies.
+  adrs: [ADR-026, ADR-030, ADR-031]
+  contracts: [INSTRUMENT.md]
+  acceptance:
+  - Henry LD1 future modeled.
+  - European Henry option-on-future modeled with exercise_style and reference_future_id.
+  - American-style option is representable but rejected by v0 pricing model.
+  - Power 5x16 placeholder config works without schema fork.
+  - MultiplierPolicy has explicit policy_id and source/version.
+  - Instrument identity round-trips deterministically.
+
+- id: W-009
+  title: Trade blotter and position projection
+  milestone: M1
+  priority: P0
+  status: planned
+  depends_on: [W-007, W-008]
+  objective: Implement append-only trade blotter and deterministic bitemporal position fold.
+  adrs: [ADR-035]
+  contracts: [BLOTTER.md]
+  acceptance:
+  - Trade events are append-only; amend/bust are new events referencing prior IDs.
+  - position_as_of(as_of, known_at) returns deterministic fold.
+  - book_version derives from applied trade-event set.
+  - Positions reproduce from event-store replay.
+
+- id: W-006
+  title: Calendar and expiry service
+  milestone: M1
+  priority: P0
+  status: planned
+  depends_on: [W-008]
+  objective: Implement versioned calendars, expiry rules, delivery periods, and settlement anchors.
+  adrs: [ADR-021]
+  contracts: [INSTRUMENT.md]
+  acceptance:
+  - Henry last-trading-day/expiry rule is represented.
+  - Settlement anchors are versioned inputs.
+  - Power calendars and 5x16 delivery profiles can be versioned.
+  - calendar_version is emitted into relevant outputs.
+
+- id: W-003
+  title: ICE Python sidecar fixture/local-live boundary
+  milestone: M2
+  priority: P0
+  status: planned
+  depends_on: [W-007, W-008]
+  objective: Implement fixture and local-live ICE Python sidecar boundary with probe, field-map, sample, normalize, and spool workflow.
+  adrs: [ADR-015, ADR-023, ADR-032]
+  contracts: [ICE_PYTHON_SIDECAR.md, EVENT_ENVELOPE.md]
+  acceptance:
+  - Fixture adapter emits raw and normalized synthetic ICE events.
+  - Local live adapter can be enabled only by explicit environment flag.
+  - Probe command discovers local ICE Python surface and writes local output under .ata_local/.
+  - Field-map command produces a local mapping artifact.
+  - Sample and normalize commands create JSONL spool/events.
+  - No non-sidecar package imports icepython.
+  - Unknown fields are quarantined.
+  - Events carry source_system and data_scope.
+
+- id: W-014
+  title: Henry futures/options golden book
+  milestone: M2
+  priority: P0
+  status: planned
+  depends_on: [W-003, W-006, W-007, W-008, W-009]
+  objective: Build deterministic Henry proving book for positions, PV, Greeks, PnL, VaR, and replay equivalence.
+  adrs: [ADR-016, ADR-019, ADR-028, ADR-030, ADR-031]
+  contracts: [PRICER.md, RISK.md, BLOTTER.md, INSTRUMENT.md]
+  acceptance:
+  - Sample portfolio contains Henry futures and European options-on-futures.
+  - PV, Greeks, position, PnL, p95 VaR, and p99 VaR are reproducible from fixtures.
+  - All numerical outputs include as_of, known_at, market_snapshot_id, book_version, calculation_version, and source_event_ids.
+  - Black-76 option-on-futures path is used for European options.
+  - American options are rejected by typed unsupported-model error.
+  - Exposure reconciles to clearing notional per MultiplierPolicy.
+  - Optional local ICE smoke path can use probed local field map without breaking CI.
+
+- id: W-026
+  title: Read-only agent loop harness, fixture-backed
+  milestone: M3
+  priority: P0
+  status: planned
+  depends_on: [W-014]
+  objective: Pull agent evidence-binding forward against synthetic Henry proving-book fixtures.
+  adrs: [ADR-025, ADR-034]
+  contracts: [AGENT_LOOP.md, AGENT_TOOLS.md]
+  acceptance:
+  - Loop runs perceive/retrieve/reason/bind/guardrail against fixtures.
+  - No numerical claim is emitted without complete EvidenceBinding.
+  - Rendered narrative is checked for unsupported numbers.
+  - Only whitelisted read-only tools are callable.
+  - SQL/write/order/credential tools are unavailable.
+
+- id: W-016
+  title: Batch revaluation loop, risk time-series, and retention
+  milestone: M3
+  priority: P0
+  status: planned
+  depends_on: [W-007, W-009, W-014]
+  objective: Implement live-style batch revaluation read-model over event store and the single authoritative pricer/risk engine.
+  adrs: [ADR-019, ADR-033, ADR-036]
+  contracts: [PORTFOLIO_REVALUATION.md, RISK_TIMESERIES.md]
+  acceptance:
+  - PortfolioRevaluationSnapshot carries as_of, known_at, market_snapshot_id, book_version, calculation_version, source_event_ids.
+  - Revaluation is market-data-refresh-driven batch/coalesced, not a second pricing path.
+  - Live-style run and event-store replay produce identical snapshots.
+  - Corrections emit superseding snapshots; past snapshots are never mutated.
+  - Per-snapshot outputs include PnL, Greeks, p95 VaR, and p99 VaR.
+  - Hot cache and EoD downsample policy follows RISK_TIMESERIES.md.
+
+- id: W-005
+  title: PJM Data Miner direct client
+  milestone: M3
+  priority: P0
+  status: planned
+  depends_on: [W-007]
+  objective: Implement direct PJM Data Miner client with raw-call persistence and revision-aware normalization.
+  adrs: [ADR-029]
+  contracts: [PJM_DATAMINER.md]
+  acceptance:
+  - Direct client persists raw calls.
+  - Pagination and checkpointing work.
+  - Revision/repost/overwrite observations are modeled.
+  - Public/synthetic fixtures exist.
+
+- id: W-015
+  title: PJM/ICE power vertical
+  milestone: M4
+  priority: P1
+  status: planned
+  depends_on: [W-003, W-005, W-016]
+  objective: Join PJM fundamentals and ICE power market data through the event store for a first power-market analytics slice.
+  adrs: [ADR-026, ADR-029]
+  contracts: [INSTRUMENT.md, PJM_DATAMINER.md, ICE_PYTHON_SIDECAR.md]
+  acceptance:
+  - Power instrument/delivery-profile conventions are represented without schema fork.
+  - PJM observations and ICE marks join through typed instruments/time intervals.
+  - Revision-aware PJM data and ICE market data replay deterministically.
+
+- id: W-N1
+  title: Nautilus replay go/no-go spike
+  milestone: M4
+  priority: P1
+  status: planned
+  depends_on: [W-014, W-016]
+  objective: Evaluate NautilusTrader as adapter/runtime spine without making it authoritative prematurely.
+  adrs: [ADR-014]
+  contracts: [EVENT_ENVELOPE.md, PRICER.md]
+  acceptance:
+  - Normalized events replay into Nautilus-compatible data.
+  - Strategy does not call ICE/PJM directly.
+  - Replay inputs are identical between event-store replay and live-style run.
+  - Go/no-go recommendation documented.
+
+- id: W-025
+  title: Full read-only semantic agent harness
+  milestone: M4
+  priority: P0
+  status: planned
+  depends_on: [W-014, W-026]
+  objective: Implement the broader read-only semantic/agent harness after fixture evidence-binding is proven.
+  adrs: [ADR-025, ADR-034]
+  contracts: [AGENT_LOOP.md, AGENT_TOOLS.md, TRADE_INTENT.md]
+  acceptance:
+  - Conforms to AGENT_LOOP.md and AGENT_TOOLS.md.
+  - Agent tools are typed and whitelisted.
+  - Agent cannot answer numerical questions without tool output and lineage.
+  - No arbitrary SQL or write tools.
+  - Answers include snapshot/version IDs.
